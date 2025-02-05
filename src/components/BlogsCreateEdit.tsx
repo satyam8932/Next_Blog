@@ -2,7 +2,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import AdminLayout from '@/app/admin/page';
 import Link from 'next/link';
-import { Loader2, Upload, X } from 'lucide-react';
+import { ArrowLeft, Loader2, Upload, X } from 'lucide-react';
 import Image from 'next/image';
 import { Category, PostCreateInput } from '@/lib/types';
 import { useRouter } from 'next/navigation';
@@ -273,7 +273,7 @@ export default function BlogForm({ mode = 'create', slug }: Props) {
         <label className="w-full h-full flex flex-col items-center justify-center cursor-pointer">
           <Upload className="w-10 h-10 text-gray-400 mb-3" />
           <div className="flex flex-col items-center">
-            <span className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+            <span className="text-sm font-medium text-blue-600 hover:text-blue-500">
               Click to upload
             </span>
             <span className="text-xs text-gray-500 mt-1">
@@ -298,6 +298,15 @@ export default function BlogForm({ mode = 'create', slug }: Props) {
   return (
     <AdminLayout>
       <div className="bg-white rounded-lg shadow p-6">
+        <div className="mb-6">
+          <Link
+            href="/admin/blogs"
+            className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
+          >
+            <ArrowLeft size={20} />
+            Back to Blogs
+          </Link>
+        </div>
         {error && (
           <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
             {error}

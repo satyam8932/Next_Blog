@@ -2,7 +2,6 @@ import { NextResponse, NextRequest } from 'next/server';
 import { prisma } from '@/lib/db';
 
 export async function GET(request: NextRequest) {
-  // ✅ Fix: Extract params from `request.nextUrl`
   const url = new URL(request.url);
   const slug = url.pathname.split('/').pop(); // Extracts slug
 
@@ -24,7 +23,6 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    // ✅ Fix: Extract params from `request.nextUrl`
     const url = new URL(request.url);
     const slug = url.pathname.split('/').pop();
 
@@ -53,7 +51,6 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    // ✅ Fix: Extract params from `request.nextUrl`
     const url = new URL(request.url);
     const slug = url.pathname.split('/').pop();
 

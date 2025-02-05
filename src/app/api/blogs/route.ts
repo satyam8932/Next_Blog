@@ -1,6 +1,7 @@
 // app/api/posts/route.ts
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { Prisma } from '@prisma/client';
 
 export async function POST(request: Request) {
   try {
@@ -32,21 +33,47 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get('page') || '1', 10);
-    const limit = parseInt(searchParams.get('limit') || '3', 10);
-    const skip = (page - 1) * limit;
+    const page = Number(searchParams.get("page")) || 1;
+    const limit = Number(searchParams.get("limit")) || 3;
+    const categoryId = searchParams.get("categoryId");
+    const status = searchParams.get("status");
 
+    // ✅ Validate Pagination Inputs
+    if (page < 1 || limit < 1) {
+      return NextResponse.json(
+        { error: "Invalid pagination parameters" },
+        { status: 400 }
+      );
+    }
+
+    const skip = (page - 1) * limit;
+    const where: Prisma.PostWhereInput = {};
+
+    // ✅ Filter by Category ID (if provided)
+    if (categoryId) where.categoryId = categoryId;
+
+    // ✅ Handle Status Filtering
+    if (status === "published") {
+      where.published = true;
+    } else if (status === "draft") {
+      where.published = false;
+    } else {
+      where.published = true; // Default: Fetch only published posts
+    }
+
+    // ✅ Fetch Posts & Total Count Concurrently
     const [posts, totalPosts] = await Promise.all([
       prisma.post.findMany({
+        where,
         include: { category: true },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         take: limit,
-        skip: skip,
+        skip,
       }),
-      prisma.post.count(),
+      prisma.post.count({ where }),
     ]);
 
     return NextResponse.json({
@@ -58,8 +85,14 @@ export async function GET(request: Request) {
         totalPages: Math.ceil(totalPosts / limit),
       },
     });
-  } catch (error) {
-    console.error('Error fetching posts:', error);
-    return NextResponse.json({ error: 'Error fetching posts' }, { status: 500 });
+  } catch (error: any) {
+    console.error("❌ Error fetching posts:", error);
+    return NextResponse.json(
+      {
+        error: "Error fetching posts",
+        details: error.message || "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 }

@@ -62,7 +62,7 @@ export default function Articles() {
                 setCategories(categoriesData);
 
                 // Fetch posts with pagination
-                const postsResponse = await fetch(`/api/blogs?page=${currentPage}&limit=6${selectedCategory ? `&categoryId=${selectedCategory}` : ''}`);
+                const postsResponse = await fetch(`/api/blogs?limit=6&published=true${selectedCategory ? `&categoryId=${selectedCategory}` : ''}`);
                 const postsData = await postsResponse.json();
 
                 if (!postsResponse.ok) {

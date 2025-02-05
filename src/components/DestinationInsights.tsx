@@ -31,7 +31,7 @@ const DestinationInsights = () => {
   const fetchPosts = async (page: number) => {
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/blogs?page=${page}&limit=3`);
+      const response = await fetch(`/api/blogs?page=${page}&limit=3&published=true`);
       if (!response.ok) throw new Error('Failed to fetch posts');
       
       const data = await response.json();

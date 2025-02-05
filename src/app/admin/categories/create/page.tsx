@@ -1,7 +1,7 @@
 'use client';
 import Link from "next/link";
 import AdminLayout from "../../page";
-import { X } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useCallback } from "react";
 
@@ -57,7 +57,7 @@ export default function CreateCategory() {
 
             // Redirect to categories list on success
             router.push('/admin/categories');
-            
+
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Failed to create category');
         } finally {
@@ -68,6 +68,15 @@ export default function CreateCategory() {
     return (
         <AdminLayout>
             <div className="bg-white rounded-lg shadow p-6">
+                <div className="mb-6">
+                    <Link
+                        href="/admin/categories"
+                        className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
+                    >
+                        <ArrowLeft size={20} />
+                        Back to Categories
+                    </Link>
+                </div>
                 {error && (
                     <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
                         {error}
