@@ -1,6 +1,5 @@
 'use client';
 import { useState, useRef, useCallback, useEffect } from 'react';
-import AdminLayout from '@/app/admin/page';
 import Link from 'next/link';
 import { ArrowLeft, Loader2, Upload, X } from 'lucide-react';
 import Image from 'next/image';
@@ -221,11 +220,9 @@ export default function BlogForm({ mode = 'create', slug }: Props) {
   console.log(previewImage)
   if (isInitialLoading) {
     return (
-      <AdminLayout>
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-lg">Loading...</div>
         </div>
-      </AdminLayout>
     );
   }
 
@@ -296,7 +293,6 @@ export default function BlogForm({ mode = 'create', slug }: Props) {
   };
 
   return (
-    <AdminLayout>
       <div className="bg-white rounded-lg shadow p-6">
         <div className="mb-6">
           <Link
@@ -393,6 +389,5 @@ export default function BlogForm({ mode = 'create', slug }: Props) {
           </div>
         </form>
       </div>
-    </AdminLayout>
   );
 }

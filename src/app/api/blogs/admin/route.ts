@@ -1,44 +1,14 @@
-// app/api/posts/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@prisma/client';
-
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    const { title, slug, content, categoryId, published, featuredImage } = body;
-
-    if (!title || !slug || !content || !categoryId) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
-    }
-
-    const post = await prisma.post.create({
-      data: {
-        title,
-        slug,
-        content,
-        categoryId,
-        published: published ?? false, // Default to false if not provided
-        featuredImage: featuredImage || null,
-      },
-      include: {
-        category: true,
-      },
-    });
-
-    return NextResponse.json(post);
-  } catch (error) {
-    console.error('Error creating post:', error);
-    return NextResponse.json({ error: 'Error creating post' }, { status: 500 });
-  }
-}
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const page = Number(searchParams.get("page")) || 1;
-    const limit = Number(searchParams.get("limit")) || 3;
+    const limit = Number(searchParams.get("limit")) || 10;
     const categoryId = searchParams.get("categoryId");
+    const status = searchParams.get("status");
     const search = searchParams.get("search");
 
     // Validate pagination inputs
@@ -50,12 +20,15 @@ export async function GET(request: NextRequest) {
     }
 
     const skip = (page - 1) * limit;
-    const where: Prisma.PostWhereInput = {
-      published: true, // Only published posts for public API
-    };
+    const where: Prisma.PostWhereInput = {};
 
-    // Apply category filter
+    // Apply filters
     if (categoryId) where.categoryId = categoryId;
+    if (status === "published") {
+      where.published = true;
+    } else if (status === "draft") {
+      where.published = false;
+    }
 
     // Add search functionality
     if (search) {
@@ -69,15 +42,10 @@ export async function GET(request: NextRequest) {
     const [posts, totalPosts] = await Promise.all([
       prisma.post.findMany({
         where,
-        select: {
-          id: true,
-          title: true,
-          slug: true,
-          featuredImage: true,
-          content: true,
-          createdAt: true,
+        include: {
           category: {
             select: {
+              id: true,
               name: true,
               slug: true,
             },

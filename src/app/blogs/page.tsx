@@ -45,7 +45,6 @@ export default function Articles() {
     const [currentPage, setCurrentPage] = useState(1);
     const [metadata, setMetadata] = useState<PaginationMetadata | null>(null);
 
-    // Fetch categories and posts
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -61,12 +60,26 @@ export default function Articles() {
 
                 setCategories(categoriesData);
 
-                // Fetch posts with pagination
-                const postsResponse = await fetch(`/api/blogs?limit=6&published=true${selectedCategory ? `&categoryId=${selectedCategory}` : ''}`);
+                // Build query string for posts
+                const queryParams = new URLSearchParams({
+                    page: currentPage.toString(),
+                    limit: '6'
+                });
+
+                if (selectedCategory) {
+                    queryParams.append('categoryId', selectedCategory);
+                }
+
+                if (searchQuery.trim()) {
+                    queryParams.append('search', searchQuery.trim());
+                }
+
+                // Fetch posts with query parameters
+                const postsResponse = await fetch(`/api/blogs?${queryParams.toString()}`);
                 const postsData = await postsResponse.json();
 
                 if (!postsResponse.ok) {
-                    throw new Error('Failed to fetch posts');
+                    throw new Error(postsData.error || 'Failed to fetch posts');
                 }
 
                 setBlogPosts(postsData.posts);
@@ -78,24 +91,20 @@ export default function Articles() {
             }
         };
 
-        fetchData();
-    }, [currentPage, selectedCategory]);
+        // Debounce the fetch when searching
+        const debounceTimer = setTimeout(fetchData, searchQuery ? 800 : 0);
+        return () => clearTimeout(debounceTimer);
+    }, [currentPage, selectedCategory, searchQuery]);
 
-    // Filter posts based on search
-    const filteredPosts = blogPosts.filter(post => {
-        return post.title.toLowerCase().includes(searchQuery.toLowerCase()) && post.published;
-    });
-
-    // Handle category change
     const handleCategoryChange = (categoryId: string) => {
         setSelectedCategory(categoryId);
-        setCurrentPage(1); // Reset to first page when changing category
+        setCurrentPage(1);
+        setSearchQuery(''); // Reset search when changing category
     };
 
-    // Handle search
     const handleSearch = (query: string) => {
         setSearchQuery(query);
-        setCurrentPage(1); // Reset to first page when searching
+        setCurrentPage(1);
     };
 
     if (error) {
@@ -142,10 +151,11 @@ export default function Articles() {
                 {/* Categories */}
                 <div className="flex flex-wrap gap-2 mb-12">
                     <button
-                        className={`px-4 py-2 rounded-full text-sm ${!selectedCategory
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
-                            }`}
+                        className={`px-4 py-2 rounded-full text-sm ${
+                            !selectedCategory
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                        }`}
                         onClick={() => handleCategoryChange('')}
                     >
                         All Articles
@@ -153,10 +163,11 @@ export default function Articles() {
                     {categories.map((category) => (
                         <button
                             key={category.id}
-                            className={`px-4 py-2 rounded-full text-sm ${selectedCategory === category.id
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
-                                }`}
+                            className={`px-4 py-2 rounded-full text-sm ${
+                                selectedCategory === category.id
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                            }`}
                             onClick={() => handleCategoryChange(category.id)}
                         >
                             {category.name}
@@ -180,7 +191,7 @@ export default function Articles() {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {filteredPosts.map((post) => (
+                        {blogPosts.map((post) => (
                             <article key={post.id} className="group">
                                 <Link href={`/blogs/${post.slug}`}>
                                     <div className="space-y-4 bg-gray-50 rounded-2xl p-5">
@@ -215,7 +226,7 @@ export default function Articles() {
                     </div>
                 )}
 
-                {!isLoading && filteredPosts.length === 0 && (
+                {!isLoading && blogPosts.length === 0 && (
                     <div className="text-center py-8 text-gray-500">
                         No articles found matching your criteria.
                     </div>
@@ -237,10 +248,11 @@ export default function Articles() {
                                 <button
                                     key={index + 1}
                                     onClick={() => setCurrentPage(index + 1)}
-                                    className={`px-4 py-2 rounded-lg ${currentPage === index + 1
-                                        ? 'bg-blue-600 text-white'
-                                        : 'border hover:bg-gray-50'
-                                        }`}
+                                    className={`px-4 py-2 rounded-lg ${
+                                        currentPage === index + 1
+                                            ? 'bg-blue-600 text-white'
+                                            : 'border hover:bg-gray-50'
+                                    }`}
                                 >
                                     {index + 1}
                                 </button>

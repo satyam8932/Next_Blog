@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
-import AdminLayout from '../../../page';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 
@@ -12,9 +11,16 @@ interface Category {
     description: string;
 }
 
-export default function EditCategory() {
+// Define props type for page
+interface EditCategoryProps {
+    params: {
+        slug: string;
+    };
+}
+
+export default function EditCategory({ params }: EditCategoryProps) {
     const router = useRouter();
-    const { slug } = useParams() as { slug: string };
+    const { slug } = params;
     const [category, setCategory] = useState<Category | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
@@ -100,122 +106,116 @@ export default function EditCategory() {
 
     if (isLoading) {
         return (
-            <AdminLayout>
-                <div className="flex items-center justify-center min-h-[400px]">
-                    <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-                </div>
-            </AdminLayout>
+            <div className="flex items-center justify-center min-h-[400px]">
+                <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+            </div>
         );
     }
 
     if (!category && !isLoading) {
         return (
-            <AdminLayout>
-                <div className="text-center py-8 text-red-600">
-                    Category not found
-                </div>
-            </AdminLayout>
+            <div className="text-center py-8 text-red-600">
+                Category not found
+            </div>
         );
     }
 
     return (
-        <AdminLayout>
-            <div className="bg-white rounded-lg shadow p-6">
-                <div className="mb-6">
-                    <Link
-                        href="/admin/categories"
-                        className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
+        <div className="bg-white rounded-lg shadow p-6">
+            <div className="mb-6">
+                <Link
+                    href="/admin/categories"
+                    className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
+                >
+                    <ArrowLeft size={20} />
+                    Back to Categories
+                </Link>
+            </div>
+
+            <h1 className="text-2xl font-semibold mb-6">Edit Category</h1>
+
+            {error && (
+                <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
+                    {error}
+                </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6 max-w-full">
+                <div>
+                    <label
+                        htmlFor="name"
+                        className="block text-sm font-medium text-gray-700 mb-1"
                     >
-                        <ArrowLeft size={20} />
-                        Back to Categories
-                    </Link>
+                        Name
+                    </label>
+                    <input
+                        type="text"
+                        id="name"
+                        value={formData.name}
+                        onChange={handleNameChange}
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        required
+                    />
                 </div>
 
-                <h1 className="text-2xl font-semibold mb-6">Edit Category</h1>
+                <div>
+                    <label
+                        htmlFor="slug"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                        Slug
+                    </label>
+                    <input
+                        type="text"
+                        id="slug"
+                        value={formData.slug}
+                        onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}  
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        required
+                    />
+                    <p className="mt-1 text-sm text-gray-500">
+                        This is the URL-friendly version of the name. It should contain only lowercase letters, numbers, and hyphens.
+                    </p>
+                </div>
 
-                {error && (
-                    <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
-                        {error}
-                    </div>
-                )}
+                <div>
+                    <label
+                        htmlFor="description"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                        Description
+                    </label>
+                    <textarea
+                        id="description"
+                        value={formData.description}
+                        onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                        rows={4}
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                        placeholder="Enter category description..."
+                    />
+                    <p className="mt-1 text-sm text-gray-500">
+                        Provide a brief description of what this category represents.
+                    </p>
+                </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6 max-w-full">
-                    <div>
-                        <label
-                            htmlFor="name"
-                            className="block text-sm font-medium text-gray-700 mb-1"
-                        >
-                            Name
-                        </label>
-                        <input
-                            type="text"
-                            id="name"
-                            value={formData.name}
-                            onChange={handleNameChange}
-                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            required
-                        />
-                    </div>
+                <div className="flex items-center gap-4">
+                    <button
+                        type="submit"
+                        disabled={isSaving}
+                        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    >
+                        {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
+                        {isSaving ? 'Saving...' : 'Save Changes'}
+                    </button>
 
-                    <div>
-                        <label
-                            htmlFor="slug"
-                            className="block text-sm font-medium text-gray-700 mb-1"
-                        >
-                            Slug
-                        </label>
-                        <input
-                            type="text"
-                            id="slug"
-                            value={formData.slug}
-                            onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}  
-                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            required
-                        />
-                        <p className="mt-1 text-sm text-gray-500">
-                            This is the URL-friendly version of the name. It should contain only lowercase letters, numbers, and hyphens.
-                        </p>
-                    </div>
-
-                    <div>
-                        <label
-                            htmlFor="description"
-                            className="block text-sm font-medium text-gray-700 mb-1"
-                        >
-                            Description
-                        </label>
-                        <textarea
-                            id="description"
-                            value={formData.description}
-                            onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                            rows={4}
-                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
-                            placeholder="Enter category description..."
-                        />
-                        <p className="mt-1 text-sm text-gray-500">
-                            Provide a brief description of what this category represents.
-                        </p>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        <button
-                            type="submit"
-                            disabled={isSaving}
-                            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                        >
-                            {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
-                            {isSaving ? 'Saving...' : 'Save Changes'}
-                        </button>
-
-                        <Link
-                            href="/admin/categories"
-                            className="px-6 py-2 border rounded-lg text-gray-600 hover:bg-gray-50 transition-colors"
-                        >
-                            Cancel
-                        </Link>
-                    </div>
-                </form>
-            </div>
-        </AdminLayout>
+                    <Link
+                        href="/admin/categories"
+                        className="px-6 py-2 border rounded-lg text-gray-600 hover:bg-gray-50 transition-colors"
+                    >
+                        Cancel
+                    </Link>
+                </div>
+            </form>
+        </div>
     );
 }
