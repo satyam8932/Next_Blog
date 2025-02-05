@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import AdminLayout from '../../../page';
 import Link from 'next/link';
 import { ArrowLeft, Loader2 } from 'lucide-react';
@@ -12,13 +12,9 @@ interface Category {
     description: string;
 }
 
-interface PageProps {
-    params: { slug: string };
-}
-
-export default function EditCategory({ params }: PageProps) {
+export default function EditCategory() {
     const router = useRouter();
-    const { slug } = params; // No need for async/await
+    const { slug } = useParams() as { slug: string };
     const [category, setCategory] = useState<Category | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);

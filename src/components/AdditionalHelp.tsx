@@ -65,67 +65,59 @@ export function AdditionalHelp() {
   const [activeTab, setActiveTab] = useState<Tab>('essentials');
 
   return (
-    <section className="max-w-7xl mx-auto px-20 py-28 bg-gradient-to-b from-gray-50 to-white rounded-3xl">
-      <div className="max-w-7xl mx-auto px-4 md:px-6">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 md:mb-12">
-          <div>
-            <span className="text-blue-600">BEYOND MOVING</span>
-            <h2 className="text-3xl md:text-4xl font-bold mt-2">Additional help</h2>
-          </div>
-        </div>
+    <section className="max-w-7xl mx-auto px-4 md:px-20 py-28 bg-gradient-to-b from-gray-50 to-white rounded-3xl">
+      <div className='text-center mb-16'>
+        <span className="text-blue-600">BEYOND MOVING</span>
+        <h2 className="text-3xl md:text-4xl font-bold mt-2">Additional help</h2>
+      </div>
+      <div className="flex space-x-4 mb-8 overflow-x-auto pb-2">
+        <button
+          onClick={() => setActiveTab('essentials')}
+          className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors ${activeTab === 'essentials'
+              ? 'bg-blue-600 text-white hover:bg-blue-700 transition-colors'
+              : 'text-gray-600 hover:bg-gray-100'
+            }`}
+        >
+          Essentials
+        </button>
+        <button
+          onClick={() => setActiveTab('settle-in')}
+          className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors ${activeTab === 'settle-in'
+              ? 'bg-blue-600 text-white hover:bg-blue-700 transition-colors'
+              : 'text-gray-600 hover:bg-gray-100'
+            }`}
+        >
+          Settle-in
+        </button>
+        <button
+          onClick={() => setActiveTab('legal-finance')}
+          className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors ${activeTab === 'legal-finance'
+              ? 'bg-blue-600 text-white hover:bg-blue-700 transition-colors'
+              : 'text-gray-600 hover:bg-gray-100'
+            }`}
+        >
+          Legal & Finance
+        </button>
+      </div>
 
-        <div className="flex space-x-4 mb-8 overflow-x-auto pb-2">
-          <button 
-            onClick={() => setActiveTab('essentials')}
-            className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
-              activeTab === 'essentials' 
-                ? 'bg-blue-600 text-white hover:bg-blue-700 transition-colors' 
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
-          >
-            Essentials
-          </button>
-          <button 
-            onClick={() => setActiveTab('settle-in')}
-            className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
-              activeTab === 'settle-in' 
-                ? 'bg-blue-600 text-white hover:bg-blue-700 transition-colors' 
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
-          >
-            Settle-in
-          </button>
-          <button 
-            onClick={() => setActiveTab('legal-finance')}
-            className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
-              activeTab === 'legal-finance' 
-                ? 'bg-blue-600 text-white hover:bg-blue-700 transition-colors' 
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
-          >
-            Legal & Finance
-          </button>
+      <div className="grid md:grid-cols-2 gap-8">
+        <div className="rounded-xl overflow-hidden">
+          <img
+            src={tabsContent[activeTab].image}
+            alt="Service"
+            className="w-full h-64 md:h-96 object-cover transition-opacity duration-300"
+          />
         </div>
-
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="rounded-xl overflow-hidden">
-            <img 
-              src={tabsContent[activeTab].image}
-              alt="Service"
-              className="w-full h-64 md:h-96 object-cover transition-opacity duration-300"
-            />
-          </div>
-          <div className="space-y-4">
-            {tabsContent[activeTab].services.map((service, index) => (
-              <div key={index} className="p-6 border rounded-lg hover:shadow-lg transition-shadow">
-                <div className="flex items-center space-x-4 mb-2">
-                  {service.icon}
-                  <h3 className="font-semibold text-lg">{service.title}</h3>
-                </div>
-                <p className="text-gray-600 ml-12">{service.description}</p>
+        <div className="space-y-4">
+          {tabsContent[activeTab].services.map((service, index) => (
+            <div key={index} className="p-6 border rounded-lg hover:shadow-lg transition-shadow">
+              <div className="flex items-center space-x-4 mb-2">
+                {service.icon}
+                <h3 className="font-semibold text-lg">{service.title}</h3>
               </div>
-            ))}
-          </div>
+              <p className="text-gray-600 ml-12">{service.description}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

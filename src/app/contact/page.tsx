@@ -98,13 +98,13 @@ export default function Contact() {
                     </div>
 
                     {/* Image Section */}
-                    <div className="relative h-[600px] overflow-hidden">
+                    <div className="relative h-[300px] md:h-[600px] overflow-hidden">
                         <Image
                             style={{clipPath: "polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%)"}}
                             src="/hero.jpg" // Add your image path here
                             alt="Contact visual"
                             fill
-                            className="object-cover"
+                            className="rounded-lg"
                             priority
                         />
                     </div>

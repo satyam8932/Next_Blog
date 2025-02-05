@@ -33,7 +33,7 @@ const DestinationInsights = () => {
       setIsLoading(true);
       const response = await fetch(`/api/blogs?page=${page}&limit=3&published=true`);
       if (!response.ok) throw new Error('Failed to fetch posts');
-      
+
       const data = await response.json();
       setPosts(data.posts);
       setMetadata(data.metadata);
@@ -57,13 +57,11 @@ const DestinationInsights = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-20 py-28 bg-gradient-to-b from-gray-50 to-white rounded-3xl">
+    <div className="max-w-7xl mx-auto px-4 md:px-20 py-28 bg-gradient-to-b from-gray-50 to-white rounded-3xl">
       {/* Header Section */}
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <p className="text-blue-600">YOUR GUIDE TO THE WORLD</p>
-          <h2 className="text-3xl md:text-4xl font-bold mt-2">Destination insights</h2>
-        </div>
+      <div className='text-center mb-16'>
+        <p className="text-blue-600">YOUR GUIDE TO THE WORLD</p>
+        <h2 className="text-3xl md:text-4xl font-bold mt-2">Destination insights</h2>
       </div>
 
       {/* Posts Grid */}
@@ -71,7 +69,7 @@ const DestinationInsights = () => {
         {isLoading ? (
           // Loading skeletons
           [...Array(3)].map((_, index) => (
-            <div 
+            <div
               key={index}
               className="bg-white rounded-xl overflow-hidden shadow-lg animate-pulse"
             >
@@ -85,7 +83,7 @@ const DestinationInsights = () => {
           ))
         ) : (
           posts.map((post) => (
-            <div 
+            <div
               key={post.id}
               className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
             >
@@ -106,13 +104,13 @@ const DestinationInsights = () => {
                     {post.category.name}
                   </span>
                 </div>
-                
+
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">
                   {post.title}
                 </h3>
 
                 <Link
-                  href={`/posts/${post.slug}`}
+                  href={`/blogs/${post.slug}`}
                   className="inline-flex items-center text-blue-600 hover:text-blue-700"
                 >
                   <span>Read more</span>

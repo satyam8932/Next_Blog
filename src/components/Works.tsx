@@ -24,7 +24,7 @@ const HowItWorks = () => {
     ];
 
     return (
-        <section className="max-w-7xl mx-auto px-20 py-28 bg-gradient-to-b from-gray-50 to-white rounded-3xl">
+        <section className="max-w-7xl mx-auto px-4 md:px-20 py-28 bg-gradient-to-b from-gray-50 to-white rounded-3xl">
             <div className="text-center mb-16">
                 <span className="text-blue-600 text-sm font-medium uppercase">IT'S EASY</span>
                 <h2 className="text-3xl md:text-4xl font-bold mt-2">How MetaExpat works</h2>
