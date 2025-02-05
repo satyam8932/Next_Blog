@@ -1,19 +1,18 @@
-// app/api/posts/[slug]/route.ts
 import { NextResponse, NextRequest } from 'next/server';
 import { prisma } from '@/lib/db';
 
-export async function GET(request: NextRequest, { params }: { params: { slug: string } }) {
-  // Await the params object
-  const { slug } = await params;
+export async function GET(request: NextRequest) {
+  // ✅ Fix: Extract params from `request.nextUrl`
+  const url = new URL(request.url);
+  const slug = url.pathname.split('/').pop(); // Extracts slug
 
-  // Fetch the post from the database
+  if (!slug) {
+    return NextResponse.json({ error: 'Slug is missing' }, { status: 400 });
+  }
+
   const post = await prisma.post.findUnique({
-    where: {
-      slug: slug,
-    },
-    include: {
-      category: true,
-    },
+    where: { slug },
+    include: { category: true },
   });
 
   if (!post) {
@@ -23,32 +22,26 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
   return NextResponse.json(post);
 }
 
-export async function PUT(request: Request, { params }: { params: { slug: string } }) {
+export async function PUT(request: NextRequest) {
   try {
-    const { slug } = await params;
+    // ✅ Fix: Extract params from `request.nextUrl`
+    const url = new URL(request.url);
+    const slug = url.pathname.split('/').pop();
+
+    if (!slug) {
+      return NextResponse.json({ error: 'Slug is missing' }, { status: 400 });
+    }
+
     const body = await request.json();
     const { title, content, categoryId, published, featuredImage } = body;
 
-    const updateData: any = {
-      title,
-      content,
-      categoryId,
-      published,
-    };
-
-    // Only include featuredImage if it's provided
-    if (featuredImage !== undefined) {
-      updateData.featuredImage = featuredImage;
-    }
+    const updateData: Record<string, any> = { title, content, categoryId, published };
+    if (featuredImage !== undefined) updateData.featuredImage = featuredImage;
 
     const post = await prisma.post.update({
-      where: {
-        slug: slug,
-      },
+      where: { slug },
       data: updateData,
-      include: {
-        category: true,
-      },
+      include: { category: true },
     });
 
     return NextResponse.json(post);
@@ -58,13 +51,18 @@ export async function PUT(request: Request, { params }: { params: { slug: string
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { slug: string } }) {
+export async function DELETE(request: NextRequest) {
   try {
-    const { slug } = await params;
+    // ✅ Fix: Extract params from `request.nextUrl`
+    const url = new URL(request.url);
+    const slug = url.pathname.split('/').pop();
+
+    if (!slug) {
+      return NextResponse.json({ error: 'Slug is missing' }, { status: 400 });
+    }
+
     await prisma.post.delete({
-      where: {
-        slug: slug,
-      },
+      where: { slug },
     });
 
     return NextResponse.json({ message: 'Post deleted successfully' });
