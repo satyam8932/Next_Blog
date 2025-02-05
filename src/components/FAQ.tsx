@@ -38,9 +38,9 @@ const FAQSection = () => {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
 
     return (
-        <section className="py-20 px-4 max-w-4xl mx-auto">
+        <section className="max-w-7xl mx-auto px-20 py-28 bg-gradient-to-b from-gray-50 to-white rounded-3xl">
             <div className="text-center mb-12">
-                <span className="text-blue-600 text-sm font-medium uppercase">
+                <span className="text-blue-600">
                     ANSWERS FOR YOUR MOVE
                 </span>
                 <h2 className="text-3xl md:text-4xl font-bold mt-2">

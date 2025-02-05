@@ -46,7 +46,7 @@ export default function Contact() {
                                 <input
                                     type="email"
                                     id="email"
-                                    placeholder="your_email@email.com"
+                                    placeholder="example@email.com"
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-0 focus:border-blue-600 sm:text-sm p-2 border"
                                 />
                             </div>
@@ -81,8 +81,8 @@ export default function Contact() {
                                 <div className="flex items-start space-x-2 text-gray-600">
                                     <MapPin className="h-5 w-5 mt-0.5" />
                                     <div>
-                                        <p>Keizersgracht 555</p>
-                                        <p>1017DR Amsterdam</p>
+                                        <p>64 Floor Burj Khalifa</p>
+                                        <p>101D United Arab Emirates</p>
                                     </div>
                                 </div>
                             </div>
@@ -121,12 +121,7 @@ export default function Contact() {
                         please quote source. All content merely provides a non-committal overview
                         of the website. No guarantee is accepted for the correctness, completeness
                         or topicality of the data. This also affects the hyperlinks. Changes or
-                        additions are made without prior notice. The EU online dispute resolution
-                        website can be{' '}
-                        <a href="#" className="text-blue-600 hover:text-blue-500">
-                            found here
-                        </a>
-                        .
+                        additions are made without prior notice.
                     </p>
                 </div>
             </main>

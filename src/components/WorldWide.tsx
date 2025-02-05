@@ -1,6 +1,9 @@
+'use client';
 import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 
 const WorldwideSection = () => {
+    const router = useRouter();
     return (
         <section className="bg-[#0A0B14] text-white py-20 relative overflow-hidden bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]">
             <div className="max-w-7xl mx-auto px-4 lg:px-6">
@@ -15,13 +18,12 @@ const WorldwideSection = () => {
                     {/* Left Column */}
                     <div className="space-y-6">
                         <p className="text-gray-400">
-                            To learn more about your destination and required documentation for the relocation process, simply speak to one of our experts.
+                            To learn more about about travel and required documentation for the relocation process, simply speak to one of our experts.
                         </p>
                         <p className="text-gray-400">
                             With years of experience, we can give you an accurate overview of the worldwide requirements for international moving and shipping.
                         </p>
-                        <Button
-                            //   variant="link" 
+                        <Button onClick={()=>{router.push('/contact')}}
                             className="w-auto px-6 py-3 bg-blue-600 text-white rounded-xl text-lg h-15 hover:bg-blue-700 transition-colors"
                         >
                             Talk to an expert →

@@ -36,3 +36,18 @@ export interface PostUpdateInput {
   published?: boolean;
   categoryId?: string;
 }
+
+export interface FormData {
+  moveReason: string[];
+  otherMoveReason?: string;
+  familyStatus: string;
+  budget: string;
+  timeline: string;
+  languages: string[];
+  otherLanguage?: string;
+  preferredCity: string;
+  specificCity?: string;
+  knowledgeLevel: string;
+  housingPreference: string;
+  needAssistance: string;
+}

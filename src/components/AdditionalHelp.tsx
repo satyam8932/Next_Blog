@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Truck, DollarSign, Home, Briefcase, FileText, CreditCard } from 'lucide-react';
+import { Truck, DollarSign, Home, Briefcase, FileText, CreditCard, User } from 'lucide-react';
 
 type Tab = 'essentials' | 'settle-in' | 'legal-finance';
 
@@ -15,17 +15,17 @@ interface TabContent {
 
 const tabsContent: Record<Tab, TabContent> = {
   'essentials': {
-    image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e',
+    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     services: [
       {
-        icon: <Truck className="text-blue-600 flex-shrink-0" size={24} />,
-        title: 'Moving Services',
-        description: 'Professional packing and transportation of your belongings'
+        icon: <User className="text-blue-600 flex-shrink-0" size={24} />,
+        title: 'Consultation',
+        description: 'Meet with a professional and get help'
       },
       {
         icon: <Home className="text-blue-600 flex-shrink-0" size={24} />,
-        title: 'Storage Solutions',
-        description: 'Secure storage facilities for your items during transition'
+        title: 'Advice',
+        description: 'Professional advice for your next move'
       }
     ]
   },
@@ -65,14 +65,13 @@ export function AdditionalHelp() {
   const [activeTab, setActiveTab] = useState<Tab>('essentials');
 
   return (
-    <section className="py-12 md:py-20">
+    <section className="max-w-7xl mx-auto px-20 py-28 bg-gradient-to-b from-gray-50 to-white rounded-3xl">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 md:mb-12">
           <div>
             <span className="text-blue-600">BEYOND MOVING</span>
             <h2 className="text-3xl md:text-4xl font-bold mt-2">Additional help</h2>
           </div>
-          <a href="#" className="text-gray-600 hover:text-blue-700 transition-colors mt-4 md:mt-0">View all services →</a>
         </div>
 
         <div className="flex space-x-4 mb-8 overflow-x-auto pb-2">

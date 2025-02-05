@@ -1,31 +1,33 @@
-import Image from 'next/image';
+'use client';
 import Link from 'next/link';
 import { Button } from './ui/button';
+import { useRouter } from 'next/navigation';
 
 const HowItWorks = () => {
+    const router = useRouter();
     const steps = [
         {
             number: 1,
             title: "Fill in your information",
-            description: "Let us know where and what you are moving. This takes only 2 minutes.",
+            description: "Define your expatriation project in a few minutes.",
         },
         {
             number: 2,
-            title: "Receive up to 6 quotes",
-            description: "Get prices from vetted movers.",
+            title: "Receive a detailed action plan",
+            description: "A personalized guide with all the steps to follow.",
         },
         {
             number: 3,
-            title: "Compare and book your move",
-            description: "Choose the mover based on reviews and prices.",
+            title: "Take action",
+            description: "Access resources and contacts to make your project a reality",
         },
     ];
 
     return (
-        <section className="py-20 px-4 md:px-6 max-w-7xl mx-auto">
+        <section className="max-w-7xl mx-auto px-20 py-28 bg-gradient-to-b from-gray-50 to-white rounded-3xl">
             <div className="text-center mb-16">
                 <span className="text-blue-600 text-sm font-medium uppercase">IT'S EASY</span>
-                <h2 className="text-3xl md:text-4xl font-bold mt-2">How Relocately works</h2>
+                <h2 className="text-3xl md:text-4xl font-bold mt-2">How MetaExpat works</h2>
             </div>
 
             <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -45,14 +47,11 @@ const HowItWorks = () => {
                             </div>
                         </div>
                     ))}
-                    <Link
-                        href="/start"
-                        className="inline-flex items-center px-6 py-3"
-                    >
-                        <Button className='w-auto px-6 py-3 bg-blue-600 text-white rounded-xl text-lg h-15 hover:bg-blue-700 transition-colors'>
+                    <div className="inline-flex items-center px-6 py-3">
+                        <Button className='w-auto px-6 py-3 bg-blue-600 text-white rounded-xl text-lg h-15 hover:bg-blue-700 transition-colors' onClick={()=>{router.push('/action')}}>
                             Start now →
                         </Button>
-                    </Link>
+                    </div>
                 </div>
 
                 {/* Dashboard Preview */}
@@ -70,15 +69,15 @@ const HowItWorks = () => {
                                 <h4 className="text-xl font-semibold">Welcome, John Davis</h4>
                             </div>
                             <div className="space-y-6">
-                                <h5 className="font-medium">Upcoming tasks</h5>
+                                <h5 className="font-medium">Upcoming Tasks</h5>
                                 {/* Task Items */}
-                                {['International Relocation', 'Secure Storage Solutions', 'Professional Vehicle Transport',].map((task, index) => (
+                                {['Visa Appointment', 'Educational Documents', 'Medical Checkup',].map((task, index) => (
                                     <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                                         <div>
                                             <p className="font-medium">{task}</p>
-                                            <p className="text-sm text-gray-500">Organized by XYZ Moving Company</p>
+                                            <p className="text-sm text-gray-500">Organized by Atria</p>
                                         </div>
-                                        <span className="text-sm text-gray-500">09/14/2024</span>
+                                        <span className="text-sm text-gray-500">29/12/2025</span>
                                     </div>
                                 ))}
                             </div>
