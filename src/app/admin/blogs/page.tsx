@@ -93,7 +93,7 @@ export default function BlogsPage() {
 
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
                 <h1 className="text-2xl font-semibold">Blogs</h1>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center flex-col md:flex-row gap-4">
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                         <input
