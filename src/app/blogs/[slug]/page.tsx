@@ -90,7 +90,7 @@ export default function BlogPost() {
                     </Link>
                     <span className="text-gray-500">/</span>
                     <Link
-                        href={`/blogs/${post.category.slug}`}
+                        href={`/blogs`}
                         className="text-blue-600 hover:text-blue-700"
                     >
                         {post.category.name.toUpperCase()}
