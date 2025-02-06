@@ -1,4 +1,3 @@
-// pages/blog/[slug].tsx
 'use client';
 import { useEffect, useState } from 'react';
 import { Footer } from '@/components/Footer';

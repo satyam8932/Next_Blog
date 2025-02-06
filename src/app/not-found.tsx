@@ -5,16 +5,34 @@ import { useEffect, useState } from 'react';
 
 export default function NotFound() {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
 
     useEffect(() => {
+        // Set initial window size
+        setWindowSize({
+            width: window.innerWidth,
+            height: window.innerHeight
+        });
+
+        // Update mouse position
         const updateMousePosition = (e: MouseEvent) => {
             setMousePosition({ x: e.clientX, y: e.clientY });
         };
 
+        // Update window size on resize
+        const updateWindowSize = () => {
+            setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight
+            });
+        };
+
         window.addEventListener('mousemove', updateMousePosition);
+        window.addEventListener('resize', updateWindowSize);
 
         return () => {
             window.removeEventListener('mousemove', updateMousePosition);
+            window.removeEventListener('resize', updateWindowSize);
         };
     }, []);
 
@@ -43,13 +61,19 @@ export default function NotFound() {
                     <div className="absolute top-1/3 left-1/4 transform -translate-x-1/2 w-16 h-16 bg-white rounded-full">
                         <motion.div
                             className="w-8 h-8 bg-blue-500 rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                            animate={calculateEyePosition({ x: window.innerWidth / 2 - 50, y: window.innerHeight / 2 })}
+                            animate={calculateEyePosition({ 
+                                x: windowSize.width / 2 - 50, 
+                                y: windowSize.height / 2 
+                            })}
                         />
                     </div>
                     <div className="absolute top-1/3 right-1/4 transform translate-x-1/2 w-16 h-16 bg-white rounded-full">
                         <motion.div
                             className="w-8 h-8 bg-blue-500 rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                            animate={calculateEyePosition({ x: window.innerWidth / 2 + 50, y: window.innerHeight / 2 })}
+                            animate={calculateEyePosition({ 
+                                x: windowSize.width / 2 + 50, 
+                                y: windowSize.height / 2 
+                            })}
                         />
                     </div>
                     {/* Mouth */}

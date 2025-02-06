@@ -1,3 +1,4 @@
+'use client'
 import { AdditionalHelp } from "@/components/AdditionalHelp";
 import FAQSection from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
