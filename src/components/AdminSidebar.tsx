@@ -37,8 +37,7 @@ const menuItems = [
     // }
 ];
 
-export default function AdminSidebar() {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+export default function AdminSidebar({ isSidebarOpen, setIsSidebarOpen } : any) {
     const [isMobile, setIsMobile] = useState(false);
     const pathname = usePathname();
 

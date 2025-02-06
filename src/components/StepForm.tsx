@@ -128,7 +128,7 @@ const StepForm = () => {
 
   return (
     <>
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
+      <div className="container mx-auto px-2 py-12 max-w-4xl">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
             Plan Your Expatriation
