@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import Step1 from './steps/Step1';
 import Step2 from './steps/Step2';
 import Step3 from './steps/Step3';
@@ -8,27 +9,42 @@ import Step4 from './steps/Step4';
 import Step5 from './steps/Step5';
 import { ProgressBar } from './ProgressBar';
 import { FormData } from '@/lib/types';
+import { toast } from 'react-hot-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Button } from './ui/button';
+
+// Add this interface for the API response
+interface SubmissionResponse {
+  success: boolean;
+  message: string;
+  estimatedTime: string;
+}
 
 const StepForm = () => {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [submissionResult, setSubmissionResult] = useState<SubmissionResponse | null>(null);
+
   const [formData, setFormData] = useState<FormData>({
-    // Section 1 initial values
     moveReason: [],
     otherMoveReason: '',
     familyStatus: '',
-
-    // Section 2 initial values
     budget: '',
     timeline: '',
-
-    // Section 3 initial values
     languages: [],
     otherLanguage: '',
     preferredCity: '',
     specificCity: '',
     knowledgeLevel: '',
-
-    // Section 4 initial values
     housingPreference: '',
     needAssistance: ''
   });
@@ -38,8 +54,6 @@ const StepForm = () => {
   const handleNext = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
-    } else {
-      handleSubmit();
     }
   };
 
@@ -49,29 +63,54 @@ const StepForm = () => {
     }
   };
 
-  const handleSubmit = async () => {
-    console.log('Form submitted:', formData);
+  const handleSubmit = async (email: string) => {
     try {
-      // Add your submission logic here
-      // Example:
-      // const response = await fetch('/api/submit-form', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(formData),
-      // });
-      // if (!response.ok) throw new Error('Submission failed');
+      const response = await fetch('/api/action-plan', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          data: {
+            moveReason: formData.moveReason,
+            otherMoveReason: formData.otherMoveReason,
+            familyStatus: formData.familyStatus,
+            budget: formData.budget,
+            timeline: formData.timeline,
+            languages: formData.languages,
+            otherLanguage: formData.otherLanguage,
+            preferredCity: formData.preferredCity,
+            specificCity: formData.specificCity,
+            knowledgeLevel: formData.knowledgeLevel,
+            housingPreference: formData.housingPreference,
+            needAssistance: formData.needAssistance
+          }
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Submission failed');
+      }
+
+      const result: SubmissionResponse = await response.json();
+      console.log('Form submitted successfully:', result);
       
-      // Handle successful submission
-      console.log('Form submitted successfully');
+      // Set the submission result and open dialog
+      setSubmissionResult(result);
+      setIsDialogOpen(true);
+      
     } catch (error) {
       console.error('Error submitting form:', error);
-      // Handle error
+      toast.error('Failed to submit form. Please try again.');
     }
   };
 
-  // Validation function (optional)
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+    router.push('/');
+  };
+
   const canProceed = () => {
     switch (currentStep) {
       case 1:
@@ -88,64 +127,87 @@ const StepForm = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-4xl">
-      <div className="bg-white rounded-2xl shadow-xl p-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-          Plan Your Expatriation
-        </h1>
+    <>
+      <div className="container mx-auto px-4 py-12 max-w-4xl">
+        <div className="bg-white rounded-2xl shadow-xl p-8">
+          <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+            Plan Your Expatriation
+          </h1>
 
-        <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
+          <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentStep}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
-            className="mt-8"
-          >
-            {currentStep === 1 && (
-              <Step1 formData={formData} setFormData={setFormData} />
-            )}
-            {currentStep === 2 && (
-              <Step2 formData={formData} setFormData={setFormData} />
-            )}
-            {currentStep === 3 && (
-              <Step3 formData={formData} setFormData={setFormData} />
-            )}
-            {currentStep === 4 && (
-              <Step4 formData={formData} setFormData={setFormData} />
-            )}
-            {currentStep === 5 && (
-              <Step5 
-                formData={formData} 
-                onSubmit={handleSubmit}
-              />
-            )}
-          </motion.div>
-        </AnimatePresence>
-
-        <div className="mt-8 flex justify-between">
-          <button
-            onClick={handleBack}
-            disabled={currentStep === 1}
-            className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg disabled:opacity-50 hover:bg-gray-200 transition-colors duration-200"
-          >
-            Back
-          </button>
-          {currentStep < 5 && (
-            <button
-              onClick={handleNext}
-              disabled={!canProceed()}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50 disabled:hover:bg-blue-600"
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentStep}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+              className="mt-8"
             >
-              Next
+              {currentStep === 1 && (
+                <Step1 formData={formData} setFormData={setFormData} />
+              )}
+              {currentStep === 2 && (
+                <Step2 formData={formData} setFormData={setFormData} />
+              )}
+              {currentStep === 3 && (
+                <Step3 formData={formData} setFormData={setFormData} />
+              )}
+              {currentStep === 4 && (
+                <Step4 formData={formData} setFormData={setFormData} />
+              )}
+              {currentStep === 5 && (
+                <Step5 
+                  formData={formData} 
+                  onSubmit={handleSubmit}
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
+
+          <div className="mt-8 flex justify-between">
+            <button
+              onClick={handleBack}
+              disabled={currentStep === 1}
+              className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg disabled:opacity-50 hover:bg-gray-200 transition-colors duration-200"
+            >
+              Back
             </button>
-          )}
+            {currentStep < 5 && (
+              <button
+                onClick={handleNext}
+                disabled={!canProceed()}
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50 disabled:hover:bg-blue-600"
+              >
+                Next
+              </button>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+
+      <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Success!</AlertDialogTitle>
+            <AlertDialogDescription>
+              {submissionResult?.message}
+              {submissionResult?.estimatedTime && (
+                <p className="mt-2">
+                  Estimated time: {submissionResult.estimatedTime}
+                </p>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <Button className='bg-blue-600 hover:bg-blue-700' onClick={handleDialogClose}>
+              Got it, thanks!
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 };
 

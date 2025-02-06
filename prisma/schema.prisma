@@ -29,3 +29,24 @@ model Post {
   categoryId    String
   category      Category @relation(fields: [categoryId], references: [id])
 }
+
+enum ActionPlanStatus {
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model ActionPlan {
+  id          String          @id @default(cuid())
+  email       String
+  status      ActionPlanStatus
+  pdfUrl      String?
+  data        Json
+  error       String?
+  startedAt   DateTime       @default(now())
+  completedAt DateTime?
+  
+  @@index([email])
+  @@index([status])
+  @@map("action_plans")
+}
