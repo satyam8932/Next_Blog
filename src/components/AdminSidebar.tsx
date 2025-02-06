@@ -12,6 +12,7 @@ import {
     X,
     ChevronRight
 } from 'lucide-react';
+import LogoutButton from './LogoutButton';
 
 const menuItems = [
     {
@@ -115,8 +116,8 @@ export default function AdminSidebar() {
                                 key={item.path}
                                 href={item.path}
                                 className={`flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 ${isActive(item.path)
-                                        ? 'bg-blue-600 text-white'
-                                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                                    ? 'bg-blue-600 text-white'
+                                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
                                     }`}
                             >
                                 <div className="flex items-center">
@@ -131,16 +132,9 @@ export default function AdminSidebar() {
                     </nav>
 
                     <div className="mt-auto pt-4">
-                        <button
-                            className="flex items-center w-full px-3 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-all duration-200"
-                            onClick={() => {
-                                // Add logout logic here
-                                console.log('Logout clicked');
-                            }}
-                        >
-                            <LogOut className="w-5 h-5 mr-3" />
-                            <span>Logout</span>
-                        </button>
+                        <div className="absolute bottom-0 left-0 right-0 p-4">
+                            <LogoutButton />
+                        </div>
                     </div>
                 </div>
             </aside>

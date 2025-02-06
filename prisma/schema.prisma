@@ -50,3 +50,15 @@ model ActionPlan {
   @@index([status])
   @@map("action_plans")
 }
+
+model User {
+    id        String   @id @default(cuid())
+    email     String   @unique
+    password  String
+    name      String?
+    isAdmin   Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("users")
+}
