@@ -1,7 +1,7 @@
 'use client';
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { Globe, Search, Star } from "lucide-react";
+import { Globe, Search, Star, User } from "lucide-react";
 import Image from "next/image";
 
 export function Hero() {
@@ -23,7 +23,7 @@ export function Hero() {
                         {[
                             { icon: Globe, text: "Recieve a detailed and personalied action plan" },
                             { icon: Search, text: "Answer few questions, get your detailed plan" },
-                            { icon: Star, text: "Trusted by 175K global users with 5K+ reviews" }
+                            { icon: User, text: "Trusted by 175K global users with 5K+ reviews" }
                         ].map((item, index) => (
                             <div key={index} className="flex items-center space-x-2">
                                 <item.icon className="text-gray-600 flex-shrink-0" size={20} />
@@ -35,7 +35,7 @@ export function Hero() {
                             {[1, 2, 3, 4, 5].map(star => (
                                 <Star key={star} className="text-yellow-400 fill-yellow-400" size={20} />
                             ))}
-                            <span className="ml-2">4.4</span>
+                            <span className="ml-2">5.0</span>
                         </div>
                     </div>
 

@@ -11,9 +11,9 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between">
           <Link href={"/"} className="text-3xl font-extrabold">MetaExpat</Link>
-          
+
           {/* Mobile menu button */}
-          <button 
+          <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="md:hidden p-2"
           >
@@ -27,7 +27,7 @@ export function Navbar() {
               <Link href={"/contact"} className="text-gray-600 hover:text-gray-900 font-semibold">Contact</Link>
             </div>
             <div className="flex space-x-4">
-              <button className="px-4 py-2 text-gray-700 border rounded-lg">English</button>
+              {/* <button className="px-4 py-2 text-gray-700 border rounded-lg">English</button> */}
               <Link href={"/action"}>
                 <button className="px-4 py-2 bg-black text-white rounded-lg">Start now →</button>
               </Link>
@@ -39,13 +39,13 @@ export function Navbar() {
         {isMenuOpen && (
           <div className="md:hidden mt-4 pb-4">
             <div className="flex flex-col space-y-4">
-              <a href="#" className="text-gray-600 hover:text-gray-900 py-2">About</a>
-              <a href="#" className="text-gray-600 hover:text-gray-900 py-2">Blog</a>
-              <a href="#" className="text-gray-600 hover:text-gray-900 py-2">Country guides</a>
-              <a href="#" className="text-gray-600 hover:text-gray-900 py-2">Services</a>
+              <Link href={"/blogs"} className="text-gray-600 hover:text-gray-900 font-semibold">Blogs</Link>
+              <Link href={"/contact"} className="text-gray-600 hover:text-gray-900 font-semibold">Contact</Link>
               <div className="flex flex-col space-y-2 pt-4 border-t">
-                <button className="px-4 py-2 text-gray-700 border rounded-lg w-full">English</button>
-                <button className="px-4 py-2 bg-black text-white rounded-lg w-full">Start now →</button>
+                {/* <button className="px-4 py-2 text-gray-700 border rounded-lg">English</button> */}
+                <Link href={"/action"}>
+                  <button className="px-4 py-2 bg-black text-white rounded-lg">Start now →</button>
+                </Link>
               </div>
             </div>
           </div>
