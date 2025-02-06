@@ -5,6 +5,7 @@ interface EmailOptions {
     to: string;
     subject: string;
     text: string;
+    html?: string; // Add HTML field
     attachments?: Array<{
         filename: string;
         path: string;
@@ -13,21 +14,29 @@ interface EmailOptions {
 
 export async function sendEmail(options: EmailOptions) {
     const transporter = nodemailer.createTransport({
-        // Configure your email service here
-        host: process.env.SMTP_HOST,
-        port: parseInt(process.env.SMTP_PORT || '587'),
-        secure: process.env.SMTP_SECURE === 'true',
+        host: 'mail.metaexpat.com',
+        port: 465,
+        secure: true,
         auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS
+            user: 'support@metaexpat.com',
+            pass: process.env.EMAIL_PASSWORD
         }
     });
 
-    await transporter.sendMail({
-        from: process.env.EMAIL_FROM,
-        to: options.to,
-        subject: options.subject,
-        text: options.text,
-        attachments: options.attachments
-    });
+    try {
+        const info = await transporter.sendMail({
+            from: '"MetaExpat Support" <support@metaexpat.com>',
+            to: options.to,
+            subject: options.subject,
+            text: options.text,
+            html: options.html, // Add HTML content
+            attachments: options.attachments
+        });
+
+        console.log('Message sent: %s', info.messageId);
+        return info;
+    } catch (error) {
+        console.error('Error sending email:', error);
+        throw error;
+    }
 }

@@ -1,4 +1,3 @@
-// lib/backgroundTasks.ts
 import { generateActionPlan } from '@/lib/actionPlan';
 import { markdownToPdf } from '@/lib/markdownToPdf';
 import { SYSTEM_PROMPT } from '@/lib/prompt';
@@ -23,7 +22,7 @@ export async function processActionPlan(userData: ActionPlanTask) {
         });
 
         const openaiResponse = await generateActionPlan(
-            SYSTEM_PROMPT, 
+            SYSTEM_PROMPT,
             JSON.stringify(userData.data)
         );
 
@@ -38,19 +37,21 @@ export async function processActionPlan(userData: ActionPlanTask) {
             }
         });
 
-        // await sendEmail({
-        //     to: userData.email,
-        //     subject: 'Your Action Plan is Ready',
-        //     text: 'Your personalized action plan has been generated and is attached to this email.',
-        //     attachments: [{
-        //         filename: 'action-plan.pdf',
-        //         path: pdfResult
-        //     }]
-        // });
+        await sendEmail({
+            to: userData.email,
+            subject: 'Your MetaExpat Action Plan',
+            text: 'Please find your personalized action plan attached.',
+            attachments: [
+                {
+                    filename: 'action-plan.pdf',
+                    path: pdfResult
+                }
+            ]
+        });
 
     } catch (error: any) {
         console.error('Background processing failed:', error);
-        
+
         if (actionPlan) {
             await prisma.actionPlan.update({
                 where: { id: actionPlan.id },
@@ -62,10 +63,10 @@ export async function processActionPlan(userData: ActionPlanTask) {
             });
         }
 
-        // await sendEmail({
-        //     to: userData.email,
-        //     subject: 'Action Plan Generation Failed',
-        //     text: 'We encountered an error while generating your action plan. Please try again later.'
-        // });
+        await sendEmail({
+            to: userData.email,
+            subject: 'Action Plan Generation Failed',
+            text: 'We encountered an error while generating your action plan. Please try again later.'
+        });
     }
 }
