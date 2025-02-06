@@ -28,15 +28,6 @@ export async function processActionPlan(userData: ActionPlanTask) {
 
         const pdfResult = await markdownToPdf(openaiResponse as string);
 
-        await prisma.actionPlan.update({
-            where: { id: actionPlan.id },
-            data: {
-                status: 'COMPLETED',
-                pdfUrl: pdfResult,
-                completedAt: new Date()
-            }
-        });
-
         await sendEmail({
             to: userData.email,
             subject: 'Your MetaExpat Action Plan',
@@ -49,10 +40,24 @@ export async function processActionPlan(userData: ActionPlanTask) {
             ]
         });
 
+        await prisma.actionPlan.update({
+            where: { id: actionPlan.id },
+            data: {
+                status: 'COMPLETED',
+                pdfUrl: pdfResult,
+                completedAt: new Date()
+            }
+        });
+
     } catch (error: any) {
         console.error('Background processing failed:', error);
-
         if (actionPlan) {
+            await sendEmail({
+                to: userData.email,
+                subject: 'Action Plan Generation Failed',
+                text: 'We encountered an error while generating your action plan. Please try again later.'
+            });
+
             await prisma.actionPlan.update({
                 where: { id: actionPlan.id },
                 data: {
@@ -62,11 +67,5 @@ export async function processActionPlan(userData: ActionPlanTask) {
                 }
             });
         }
-
-        await sendEmail({
-            to: userData.email,
-            subject: 'Action Plan Generation Failed',
-            text: 'We encountered an error while generating your action plan. Please try again later.'
-        });
     }
 }
