@@ -85,8 +85,8 @@ const Step4 = ({ formData, setFormData }: Step4Props) => {
               whileTap={{ scale: 0.98 }}
               className={`
                 relative rounded-xl border-2 p-6 cursor-pointer transition-all duration-200
-                ${formData.housingPreference === option.value 
-                  ? 'border-blue-500 bg-blue-50' 
+                ${formData.housingPreference === option.value
+                  ? 'border-blue-500 bg-blue-50'
                   : 'border-gray-200 hover:border-blue-200'}
               `}
               onClick={() => setFormData({ ...formData, housingPreference: option.value })}
@@ -99,8 +99,8 @@ const Step4 = ({ formData, setFormData }: Step4Props) => {
                 </div>
                 <div className={`
                   w-5 h-5 rounded-full border-2 flex items-center justify-center
-                  ${formData.housingPreference === option.value 
-                    ? 'border-blue-500' 
+                  ${formData.housingPreference === option.value
+                    ? 'border-blue-500'
                     : 'border-gray-300'}
                 `}>
                   {formData.housingPreference === option.value && (
@@ -111,22 +111,6 @@ const Step4 = ({ formData, setFormData }: Step4Props) => {
             </motion.div>
           ))}
         </div>
-
-        {/* Housing Information Card */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="bg-blue-50 rounded-lg p-4 border border-blue-100"
-        >
-          <h3 className="text-blue-800 font-medium mb-2">Housing Market Insight</h3>
-          <p className="text-blue-600 text-sm">
-            {formData.housingPreference === 'rent' 
-              ? "Rental contracts in UAE typically require 1-4 cheques per year. Security deposits and agency fees may apply."
-              : formData.housingPreference === 'buy'
-              ? "Property purchase in UAE often requires a minimum down payment of 20-25% for expatriates."
-              : "Both renting and buying have their advantages. We'll provide detailed information to help you decide."}
-          </p>
-        </motion.div>
       </div>
 
       {/* Administrative Support Section */}
@@ -146,8 +130,8 @@ const Step4 = ({ formData, setFormData }: Step4Props) => {
               whileTap={{ scale: 0.99 }}
               className={`
                 relative rounded-xl border-2 p-6 cursor-pointer transition-all duration-200
-                ${formData.needAssistance === option.value 
-                  ? 'border-blue-500 bg-blue-50' 
+                ${formData.needAssistance === option.value
+                  ? 'border-blue-500 bg-blue-50'
                   : 'border-gray-200 hover:border-blue-200'}
               `}
               onClick={() => setFormData({ ...formData, needAssistance: option.value })}
@@ -157,8 +141,8 @@ const Step4 = ({ formData, setFormData }: Step4Props) => {
                   <div className="flex items-center space-x-3">
                     <div className={`
                       w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center
-                      ${formData.needAssistance === option.value 
-                        ? 'border-blue-500' 
+                      ${formData.needAssistance === option.value
+                        ? 'border-blue-500'
                         : 'border-gray-300'}
                     `}>
                       {formData.needAssistance === option.value && (
@@ -186,22 +170,6 @@ const Step4 = ({ formData, setFormData }: Step4Props) => {
           ))}
         </div>
       </div>
-
-      {/* Recommendations Based on Selections */}
-      {formData.housingPreference && formData.needAssistance && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="bg-green-50 rounded-lg p-4 border border-green-100 mt-8"
-        >
-          <h3 className="text-green-800 font-medium mb-2">Personalized Recommendation</h3>
-          <p className="text-green-600 text-sm">
-            {formData.needAssistance === 'need_support'
-              ? "Based on your preferences, we'll connect you with experienced professionals who can guide you through the entire process."
-              : "We'll provide you with comprehensive resources and checklists to help you manage the process independently."}
-          </p>
-        </motion.div>
-      )}
 
       {/* Validation Message */}
       {(!formData.housingPreference || !formData.needAssistance) && (

@@ -257,15 +257,6 @@ const Step3 = ({ formData, setFormData }: Step3Props) => {
         </div>
       </div>
 
-      {/* Information Card */}
-      <div className="bg-purple-50 rounded-lg p-4 border border-purple-100 mt-8">
-        <h3 className="text-purple-800 font-medium mb-2">Did you know?</h3>
-        <p className="text-purple-600 text-sm">
-          Most government services in the UAE are available in both Arabic and English. 
-          However, having basic Arabic knowledge can be beneficial for day-to-day life.
-        </p>
-      </div>
-
       {/* Validation Message */}
       {(!formData.languages.length || !formData.preferredCity || !formData.knowledgeLevel) && (
         <motion.p

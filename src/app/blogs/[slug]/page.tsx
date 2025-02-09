@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Footer } from '@/components/Footer';
 import { Navbar } from '@/components/Navbar';
 import Image from 'next/image';
@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import BlogContent from '@/components/BlogContent';
 import { format } from 'date-fns';
-import { LoadingScreen } from '@/components/LoadingSpinner';
+import { motion } from 'framer-motion';
 
 interface Post {
     id: string;
@@ -27,6 +27,7 @@ export default function BlogPost() {
     const [post, setPost] = useState<Post | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string>('');
+    const contentRef = useRef<HTMLDivElement>(null);
 
     // Fetch post data
     useEffect(() => {
@@ -34,11 +35,7 @@ export default function BlogPost() {
             try {
                 setIsLoading(true);
                 const response = await fetch(`/api/blogs/${params.slug}`);
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch post');
-                }
-
+                if (!response.ok) throw new Error('Failed to fetch post');
                 const data = await response.json();
                 setPost(data);
             } catch (err) {
@@ -53,9 +50,26 @@ export default function BlogPost() {
         }
     }, [params.slug]);
 
-    if (isLoading) {
-        return <LoadingScreen />;
-    }
+    const scrollToHeading = (headingText: string) => {
+        if (contentRef.current) {
+            const headings = contentRef.current.querySelectorAll('h2, h3');
+            for (const heading of headings) {
+                if (heading.textContent === headingText) {
+                    const headerOffset = 100;
+                    const elementPosition = heading.getBoundingClientRect().top;
+                    const offsetPosition = window.pageYOffset + elementPosition - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                    break;
+                }
+            }
+        }
+    };
+
+    if (isLoading) return <></>;
 
     if (error || !post) {
         return (
@@ -69,15 +83,18 @@ export default function BlogPost() {
         );
     }
 
-    // Generate table of contents from content
-    // This is a simple example - you might want to use a markdown parser
-    // or implement a more sophisticated way to generate the TOC
-    // const tableOfContents = post.content
-    //     .match(/<h[2-3][^>]*>(.*?)<\/h[2-3]>/g)
-    //     ?.map((match, index) => ({
-    //         id: index + 1,
-    //         title: match.replace(/<\/?[^>]+(>|$)/g, ""),
-    //     })) || [];
+    // Extract headings from content
+    const getTableOfContents = () => {
+        const div = document.createElement('div');
+        div.innerHTML = post.content;
+        const headings = div.querySelectorAll('h2, h3');
+        return Array.from(headings).map(heading => ({
+            title: heading.textContent || '',
+            level: heading.tagName.toLowerCase() === 'h2' ? 2 : 3
+        }));
+    };
+
+    const tableOfContents = getTableOfContents();
 
     return (
         <>
@@ -119,45 +136,46 @@ export default function BlogPost() {
                     />
                 </div>
 
-                {/* Content Grid */}
+                {/* Content Grid - Modified for better mobile ordering */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                    {/* Main Content */}
-                    <div className="lg:col-span-2">
-                        <div className="prose prose-lg max-w-none">
-                            <BlogContent content={post.content} />
-                        </div>
-                    </div>
-
-                    {/* Sidebar */}
-                    <div className="lg:col-span-1">
-                        {/* Table of Contents */}
-                        <div className="sticky top-8 space-y-6">
-                            {/* <div className="bg-gray-50 rounded-2xl p-6">
-                                <h2 className="text-xl font-semibold mb-4">Content</h2>
-                                <nav className="space-y-2">
-                                    {tableOfContents.map((item) => (
-                                        <a
-                                            key={item.id}
-                                            href={`#section-${item.id}`}
-                                            className="block text-sm text-gray-600 hover:text-blue-600"
+                    {/* Sidebar/Table of Contents - Now appears first on mobile */}
+                    <div className="col-span-1 lg:col-span-1 order-1 lg:order-2">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="lg:sticky lg:top-8 space-y-6"
+                        >
+                            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                                <h2 className="text-xl font-semibold mb-6">Table of Contents</h2>
+                                <nav className="toc-container space-y-3">
+                                    {tableOfContents.map((item, index) => (
+                                        <motion.div
+                                            key={index}
+                                            whileHover={{ x: 5 }}
+                                            transition={{ duration: 0.2 }}
                                         >
-                                            {item.title}
-                                        </a>
+                                            <button
+                                                onClick={() => scrollToHeading(item.title)}
+                                                className={`
+                                                text-gray-600 hover:text-blue-600 transition-colors
+                                                ${item.level === 2 ? 'font-medium' : 'pl-4 text-sm'}
+                                                block w-full text-left
+                                            `}
+                                            >
+                                                {item.title}
+                                            </button>
+                                        </motion.div>
                                     ))}
                                 </nav>
-                            </div> */}
-
-                            {/* CTA Card */}
-                            <div className="bg-[#0A0B14] text-white rounded-2xl p-6">
-                                <h3 className="text-2xl font-bold mb-4">Save up to 50%</h3>
-                                <p className="text-gray-300 mb-6">
-                                    Receive up to 6 free quotes from international movers in 3 simple steps.
-                                    Start comparing now!
-                                </p>
-                                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg">
-                                    Get started →
-                                </button>
                             </div>
+                        </motion.div>
+                    </div>
+
+                    {/* Main Content - Now appears second on mobile */}
+                    <div className="col-span-1 lg:col-span-2 order-2 lg:order-1">
+                        <div ref={contentRef} className="blog-content">
+                            <BlogContent content={post.content} />
                         </div>
                     </div>
                 </div>

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,7 +28,7 @@ export function Navbar() {
               <Link href={"/contact"} className="text-gray-600 hover:text-gray-900 font-semibold">Contact</Link>
             </div>
             <div className="flex space-x-4">
-              {/* <button className="px-4 py-2 text-gray-700 border rounded-lg">English</button> */}
+              <LanguageSwitcher />
               <Link href={"/action"}>
                 <button className="px-4 py-2 bg-black text-white rounded-lg">Start now →</button>
               </Link>
@@ -42,7 +43,7 @@ export function Navbar() {
               <Link href={"/blogs"} className="text-gray-600 hover:text-gray-900 font-semibold">Blogs</Link>
               <Link href={"/contact"} className="text-gray-600 hover:text-gray-900 font-semibold">Contact</Link>
               <div className="flex flex-col space-y-2 pt-4 border-t">
-                {/* <button className="px-4 py-2 text-gray-700 border rounded-lg">English</button> */}
+                <LanguageSwitcher />
                 <Link href={"/action"}>
                   <button className="px-4 py-2 bg-black text-white rounded-lg">Start now →</button>
                 </Link>

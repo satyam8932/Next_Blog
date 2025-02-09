@@ -211,3 +211,64 @@ border-radius: 1rem;
 .blog-content .ProseMirror-selectednode {
   @apply outline-2 outline-blue-500;
 }
+
+/* globals.css */
+.blog-content h2 {
+  font-size: 2.25rem !important; /* text-4xl */
+  font-weight: 700 !important;
+  margin-top: 2rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.blog-content h3 {
+  font-size: 1.875rem !important; /* text-3xl */
+  font-weight: 600 !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Table of contents specific styles */
+.toc-container {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #E5E7EB transparent;
+}
+
+.toc-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.toc-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.toc-container::-webkit-scrollbar-thumb {
+  background-color: #E5E7EB;
+  border-radius: 3px;
+}
+
+/* Google Translate Styles */
+.goog-te-banner-frame,
+.skiptranslate {
+  display: none !important;
+}
+
+body {
+  top: 0 !important;
+}
+
+.goog-te-gadget {
+  height: 0 !important;
+  overflow: hidden;
+}
+
+.translated-rtl {
+  direction: rtl;
+}
+
+/* Hide Google Translate elements */
+.VIpgJd-ZVi9od-l4eHX-hSRGPd,
+.VIpgJd-ZVi9od-ORHb-OEVmcd {
+  display: none !important;
+}

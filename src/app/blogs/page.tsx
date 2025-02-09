@@ -2,10 +2,11 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Search } from 'lucide-react';
+import { Search, Share2 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { format } from 'date-fns';
+import { Toaster, toast } from 'react-hot-toast';
 
 interface Category {
     id: string;
@@ -107,12 +108,41 @@ export default function Articles() {
         setCurrentPage(1);
     };
 
+    const handleShare = async (slug: string) => {
+        const url = `${window.location.origin}/blogs/${slug}`;
+        try {
+            await navigator.clipboard.writeText(url);
+            toast.success('Link copied to clipboard!', {
+                duration: 2000,
+                position: 'top-center',
+                // style: {
+                //     background: '#4aed88',
+                //     color: '#fff',
+                //     padding: '16px',
+                //     borderRadius: '10px',
+                // },
+            });
+        } catch (err) {
+            toast.error('Failed to copy link', {
+                duration: 2000,
+                position: 'top-center',
+                // style: {
+                //     background: '#ff4b4b',
+                //     color: '#fff',
+                //     padding: '16px',
+                //     borderRadius: '10px',
+                // },
+            });
+        }
+    };
+
     if (error) {
         return <div className="text-center text-red-600 py-8">{error}</div>;
     }
 
     return (
         <>
+            <Toaster />
             <Navbar />
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 {/* Hero Section */}
@@ -151,11 +181,10 @@ export default function Articles() {
                 {/* Categories */}
                 <div className="flex flex-wrap gap-2 mb-12">
                     <button
-                        className={`px-4 py-2 rounded-full text-sm ${
-                            !selectedCategory
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
-                        }`}
+                        className={`px-4 py-2 rounded-full text-sm ${!selectedCategory
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                            }`}
                         onClick={() => handleCategoryChange('')}
                     >
                         All Articles
@@ -163,11 +192,10 @@ export default function Articles() {
                     {categories.map((category) => (
                         <button
                             key={category.id}
-                            className={`px-4 py-2 rounded-full text-sm ${
-                                selectedCategory === category.id
-                                    ? 'bg-blue-600 text-white'
-                                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
-                            }`}
+                            className={`px-4 py-2 rounded-full text-sm ${selectedCategory === category.id
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                                }`}
                             onClick={() => handleCategoryChange(category.id)}
                         >
                             {category.name}
@@ -193,34 +221,47 @@ export default function Articles() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {blogPosts.map((post) => (
                             <article key={post.id} className="group">
-                                <Link href={`/blogs/${post.slug}`}>
-                                    <div className="space-y-4 bg-gray-50 rounded-2xl p-5">
-                                        <div className="relative h-48 rounded-2xl overflow-hidden">
-                                            <Image
-                                                src={post.featuredImage || '/default-blog-image.jpg'}
-                                                alt={post.title}
-                                                fill
-                                                className="object-cover transition-transform group-hover:scale-105"
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
+                                <div className="space-y-4 bg-gray-50 rounded-2xl p-5">
+                                    <div className="relative h-48 rounded-2xl overflow-hidden">
+                                        <Image
+                                            src={post.featuredImage || '/default-blog-image.jpg'}
+                                            alt={post.title}
+                                            fill
+                                            className="object-cover transition-transform group-hover:scale-105"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <div className="flex items-center justify-between">
                                             <p className="text-sm font-medium text-blue-600">
                                                 {post.category.name}
                                             </p>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.preventDefault(); // Prevent link navigation
+                                                    handleShare(post.slug);
+                                                }}
+                                                className="p-2 hover:bg-gray-200 rounded-full transition-colors"
+                                                aria-label="Share post"
+                                            >
+                                                <Share2 className="w-4 h-4 text-gray-600" />
+                                            </button>
+                                        </div>
+
+                                        <Link href={`/blogs/${post.slug}`}>
                                             <h2 className="text-xl font-semibold text-gray-900 group-hover:text-blue-700">
                                                 {post.title}
                                             </h2>
                                             <p className="text-sm text-gray-500">
                                                 {format(new Date(post.createdAt), 'MMMM dd, yyyy')}
                                             </p>
-                                        </div>
-                                        <div className="pt-2">
-                                            <span className="text-sm font-medium text-blue-600 hover:text-blue-700">
-                                                Read more →
-                                            </span>
-                                        </div>
+                                            <div className="pt-2">
+                                                <span className="text-sm font-medium text-blue-600 hover:text-blue-700">
+                                                    Read more →
+                                                </span>
+                                            </div>
+                                        </Link>
                                     </div>
-                                </Link>
+                                </div>
                             </article>
                         ))}
                     </div>
@@ -248,11 +289,10 @@ export default function Articles() {
                                 <button
                                     key={index + 1}
                                     onClick={() => setCurrentPage(index + 1)}
-                                    className={`px-4 py-2 rounded-lg ${
-                                        currentPage === index + 1
-                                            ? 'bg-blue-600 text-white'
-                                            : 'border hover:bg-gray-50'
-                                    }`}
+                                    className={`px-4 py-2 rounded-lg ${currentPage === index + 1
+                                        ? 'bg-blue-600 text-white'
+                                        : 'border hover:bg-gray-50'
+                                        }`}
                                 >
                                     {index + 1}
                                 </button>

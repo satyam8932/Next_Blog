@@ -22,6 +22,29 @@ const Step1 = ({ formData, setFormData }: Step1Props) => {
         </p>
       </div>
 
+      {/* Country of Origin Section */}
+      <div className="space-y-4 mt-8">
+        <label className="block text-lg font-medium text-gray-700">
+          What is your country of origin?
+          <span className="block text-sm text-gray-500 font-normal mt-1">
+            Select your home country
+          </span>
+        </label>
+
+        <select
+          value={formData.countryOfOrigin || ''}
+          onChange={(e) => setFormData({ ...formData, countryOfOrigin: e.target.value })}
+          className="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500"
+        >
+          <option value="">Select a country</option>
+          {formOptions.countries.map((country) => (
+            <option key={country} value={country}>
+              {country}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {/* Move Reason Section */}
       <div className="space-y-4">
         <label className="block text-lg font-medium text-gray-700">
@@ -37,8 +60,8 @@ const Step1 = ({ formData, setFormData }: Step1Props) => {
               key={reason}
               className={`
                 relative rounded-lg border-2 p-4 cursor-pointer transition-all duration-200
-                ${formData.moveReason.includes(reason) 
-                  ? 'border-blue-500 bg-blue-50' 
+                ${formData.moveReason.includes(reason)
+                  ? 'border-blue-500 bg-blue-50'
                   : 'border-gray-200 hover:border-blue-200'}
               `}
               onClick={() => {
@@ -51,8 +74,8 @@ const Step1 = ({ formData, setFormData }: Step1Props) => {
               <div className="flex items-center space-x-3">
                 <div className={`
                   w-5 h-5 rounded border-2 flex items-center justify-center
-                  ${formData.moveReason.includes(reason) 
-                    ? 'border-blue-500 bg-blue-500' 
+                  ${formData.moveReason.includes(reason)
+                    ? 'border-blue-500 bg-blue-500'
                     : 'border-gray-300'}
                 `}>
                   {formData.moveReason.includes(reason) && (
@@ -100,8 +123,8 @@ const Step1 = ({ formData, setFormData }: Step1Props) => {
               key={status}
               className={`
                 relative rounded-lg border-2 p-4 cursor-pointer transition-all duration-200
-                ${formData.familyStatus === status 
-                  ? 'border-blue-500 bg-blue-50' 
+                ${formData.familyStatus === status
+                  ? 'border-blue-500 bg-blue-50'
                   : 'border-gray-200 hover:border-blue-200'}
               `}
               onClick={() => setFormData({ ...formData, familyStatus: status })}
@@ -109,8 +132,8 @@ const Step1 = ({ formData, setFormData }: Step1Props) => {
               <div className="flex items-center space-x-3">
                 <div className={`
                   w-5 h-5 rounded-full border-2 flex items-center justify-center
-                  ${formData.familyStatus === status 
-                    ? 'border-blue-500' 
+                  ${formData.familyStatus === status
+                    ? 'border-blue-500'
                     : 'border-gray-300'}
                 `}>
                   {formData.familyStatus === status && (

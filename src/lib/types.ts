@@ -50,4 +50,5 @@ export interface FormData {
   knowledgeLevel: string;
   housingPreference: string;
   needAssistance: string;
+  countryOfOrigin: string;
 }

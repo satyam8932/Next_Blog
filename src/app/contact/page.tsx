@@ -166,7 +166,7 @@ export default function Contact() {
                         </form>
 
                         {/* Company Info */}
-                        <div className="grid grid-cols-2 gap-8 pt-8 border-t border-gray-200">
+                        {/* <div className="grid grid-cols-2 gap-8 pt-8 border-t border-gray-200">
                             <div className="space-y-4">
                                 <h3 className="text-lg font-medium text-gray-900">Moveasy B.V.</h3>
                                 <div className="flex items-start space-x-2 text-gray-600">
@@ -185,7 +185,7 @@ export default function Contact() {
                                     <p>Mon – Fri: 10:00 to 18:00</p>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Image Section */}
@@ -202,7 +202,7 @@ export default function Contact() {
                 </div>
 
                 {/* Legal Notice */}
-                <div className="mt-16 text-sm text-gray-500 bg-zinc-100 p-6 rounded-3xl">
+                {/* <div className="mt-16 text-sm text-gray-500 bg-zinc-100 p-6 rounded-3xl">
                     <h3 className="flex items-center space-x-2 font-medium text-gray-900 mb-2">
                         <Mail className="h-4 w-4" />
                         <span>Legal Notice</span>
@@ -214,7 +214,7 @@ export default function Contact() {
                         or topicality of the data. This also affects the hyperlinks. Changes or
                         additions are made without prior notice.
                     </p>
-                </div>
+                </div> */}
 
                 {/* Alert Dialog */}
                 <AlertDialog

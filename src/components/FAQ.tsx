@@ -1,6 +1,9 @@
 'use client';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from './ui/button';
+import { MessageCircle, Router } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface FAQItem {
     question: string;
@@ -9,39 +12,39 @@ interface FAQItem {
 
 const faqs: FAQItem[] = [
     {
-        question: "What is international shipping?",
-        answer: "International shipping is the process of transporting goods across international borders. It involves various logistics, documentation, and customs procedures to ensure safe and legal delivery of items from one country to another."
+        question: "What is MetaExpat?",
+        answer: "MetaExpat is a platform that helps you plan your relocation to the United Arab Emirates by providing a personalized action plan and resources tailored to your project."
     },
     {
-        question: "How can I get free shipping quotes?",
-        answer: "You can get free shipping quotes by filling out our online form or contacting our customer service team. We'll provide detailed pricing based on your specific requirements, destination, and shipment details."
+        question: "How does MetaExpat work?",
+        answer: "Fill out our interactive form by answering specific questions about your relocation project. Receive a detailed action plan with all the necessary steps for your relocation. Take action using our recommendations and resources."
     },
     {
-        question: "What items can I ship internationally?",
-        answer: "Most personal and commercial items can be shipped internationally. However, there are restrictions on dangerous goods, perishables, and certain regulated items. Contact us for a detailed list of prohibited items."
+        question: "Is MetaExpat a paid service?",
+        answer: "No, you can receive your personalized action plan free of charge."
     },
     {
-        question: "How long does international shipping take?",
-        answer: "Shipping times vary depending on the destination, shipping method, and customs processing. Typical timeframes range from 5-30 business days. Express services are available for faster delivery."
+        question: "In what format will I receive my action plan?",
+        answer: "You will receive your action plan in PDF format immediately after completing it."
     },
     {
-        question: "What should I know about customs duties or taxes?",
-        answer: "Customs duties and taxes vary by country and type of goods. These charges are typically paid by the recipient and are calculated based on the declared value and nature of the items being shipped."
+        question: "How long will it take to receive my action plan?",
+        answer: "The action plan is generated within a few minutes after completing the form."
     },
     {
-        question: "How do I track my shipment?",
-        answer: "Once your shipment is processed, you'll receive a tracking number. You can use this number on our website or app to monitor your shipment's progress in real-time."
+        question: "Is the action plan available in multiple languages?",
+        answer: "Yes! You can choose to receive your action plan in French, English, or Arabic."
     }
 ];
 
 const FAQSection = () => {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
-
+    const router = useRouter()
     return (
         <section className="max-w-7xl mx-auto px-4 md:px-20 py-28 bg-gradient-to-b from-gray-50 to-white rounded-3xl">
             <div className="text-center mb-12">
                 <span className="text-blue-600">
-                    ANSWERS FOR YOUR MOVE
+                    YOUR METAEXPAT FAQ
                 </span>
                 <h2 className="text-3xl md:text-4xl font-bold mt-2">
                     Frequently Asked Questions
@@ -60,9 +63,8 @@ const FAQSection = () => {
                         >
                             <span className="font-medium text-gray-900">{faq.question}</span>
                             <svg
-                                className={`w-5 h-5 transform transition-transform ${
-                                    openIndex === index ? 'rotate-180' : ''
-                                }`}
+                                className={`w-5 h-5 transform transition-transform ${openIndex === index ? 'rotate-180' : ''
+                                    }`}
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
@@ -93,6 +95,68 @@ const FAQSection = () => {
                     </div>
                 ))}
             </div>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+                className="relative my-24 px-6 py-12 rounded-3xl bg-gradient-to-r from-blue-50 to-indigo-50 overflow-hidden"
+            >
+                {/* Background decoration */}
+                <div className="absolute inset-0 overflow-hidden">
+                    <div className="absolute -left-4 -top-4 w-24 h-24 bg-blue-100 rounded-full opacity-50"></div>
+                    <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-indigo-100 rounded-full opacity-50"></div>
+                </div>
+
+                <div className="relative text-center space-y-6 max-w-2xl mx-auto">
+                    <motion.span
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="text-blue-600 text-sm font-medium uppercase tracking-wider"
+                    >
+                        Still Have Questions?
+                    </motion.span>
+
+                    <motion.h3
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="text-3xl md:text-4xl font-bold text-gray-900"
+                    >
+                        Can&#39;t Find Your Answer?
+                    </motion.h3>
+
+                    <motion.p
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                        className="text-gray-600 max-w-lg mx-auto"
+                    >
+                        Our team is here to help you with any questions you might have. We're available 24/7 to assist you.
+                    </motion.p>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 }}
+                        className="flex flex-col sm:flex-row items-center justify-center gap-4"
+                    >
+                        <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            <Button
+                                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl text-lg font-medium flex items-center gap-2 h-auto"
+                                onClick={() => router.push('/contact')}
+                            >
+                                <MessageCircle className="w-5 h-5" />
+                                Get in Touch!
+                            </Button>
+                        </motion.div>
+                    </motion.div>
+                </div>
+            </motion.div>
         </section>
     );
 };

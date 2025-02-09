@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Truck, DollarSign, Home, Briefcase, FileText, CreditCard, User } from 'lucide-react';
+import { Home, Briefcase, FileText, CreditCard, User } from 'lucide-react';
 
 type Tab = 'essentials' | 'settle-in' | 'legal-finance';
 
@@ -15,17 +15,17 @@ interface TabContent {
 
 const tabsContent: Record<Tab, TabContent> = {
   'essentials': {
-    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    image: '/slide1.jpg',
     services: [
       {
         icon: <User className="text-blue-600 flex-shrink-0" size={24} />,
         title: 'Consultation',
-        description: 'Meet with a professional and get help'
+        description: 'Book a session with our UAE relocation experts to get personalized advice tailored to your needs.'
       },
       {
         icon: <Home className="text-blue-600 flex-shrink-0" size={24} />,
         title: 'Advice',
-        description: 'Professional advice for your next move'
+        description: 'Receive professional recommendations to simplify your move and avoid common pitfalls in the UAE.'
       }
     ]
   },
@@ -34,13 +34,13 @@ const tabsContent: Record<Tab, TabContent> = {
     services: [
       {
         icon: <Briefcase className="text-blue-600 flex-shrink-0" size={24} />,
-        title: 'Job Search Assistance',
-        description: 'Help finding employment in your new location'
+        title: 'Transportation & Mobility Support',
+        description: 'Learn how to obtain a UAE driving license, register your vehicle, or navigate public transport options.'
       },
       {
         icon: <Home className="text-blue-600 flex-shrink-0" size={24} />,
         title: 'Housing Support',
-        description: 'Guidance in finding and securing accommodation'
+        description: 'Guidance in finding and securing accommodation in UAE with the help of our connections.'
       }
     ]
   },
@@ -67,8 +67,8 @@ export function AdditionalHelp() {
   return (
     <section className="max-w-7xl mx-auto px-4 md:px-20 py-28 bg-gradient-to-b from-gray-50 to-white rounded-3xl">
       <div className='text-center mb-16'>
-        <span className="text-blue-600">BEYOND MOVING</span>
-        <h2 className="text-3xl md:text-4xl font-bold mt-2">Additional help</h2>
+        <span className="text-blue-600">TAILORED SUPPORT</span>
+        <h2 className="text-3xl md:text-4xl font-bold mt-2">Expert Support for Your UAE Journey</h2>
       </div>
       <div className="flex space-x-4 mb-8 overflow-x-auto pb-2">
         <button
@@ -78,7 +78,7 @@ export function AdditionalHelp() {
               : 'text-gray-600 hover:bg-gray-100'
             }`}
         >
-          Essentials
+          Relocation Basics
         </button>
         <button
           onClick={() => setActiveTab('settle-in')}
@@ -87,7 +87,7 @@ export function AdditionalHelp() {
               : 'text-gray-600 hover:bg-gray-100'
             }`}
         >
-          Settle-in
+          Living in the UAE
         </button>
         <button
           onClick={() => setActiveTab('legal-finance')}
@@ -96,7 +96,7 @@ export function AdditionalHelp() {
               : 'text-gray-600 hover:bg-gray-100'
             }`}
         >
-          Legal & Finance
+          Legal & Finance Guidance
         </button>
       </div>
 

@@ -91,15 +91,6 @@ const Step2 = ({ formData, setFormData }: Step2Props) => {
             ))}
           </div>
         </div>
-
-        {/* Budget Information Card */}
-        <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
-          <h3 className="text-blue-800 font-medium mb-2">Budget Tip</h3>
-          <p className="text-blue-600 text-sm">
-            Remember to account for initial setup costs such as housing deposits, 
-            visa fees, and an emergency fund for unexpected expenses.
-          </p>
-        </div>
       </div>
 
       {/* Timeline Section */}
@@ -143,36 +134,7 @@ const Step2 = ({ formData, setFormData }: Step2Props) => {
             ))}
           </div>
         </div>
-
-        {/* Timeline Information Card */}
-        <div className="bg-green-50 rounded-lg p-4 border border-green-100">
-          <h3 className="text-green-800 font-medium mb-2">Timeline Consideration</h3>
-          <p className="text-green-600 text-sm">
-            Processing times for visas and permits can vary. Consider allowing extra time 
-            for document preparation and administrative procedures.
-          </p>
-        </div>
       </div>
-
-      {/* Dynamic Recommendations */}
-      {formData.budget && formData.timeline && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mt-8 bg-yellow-50 rounded-lg p-4 border border-yellow-100"
-        >
-          <h3 className="text-yellow-800 font-medium mb-2">Personalized Insight</h3>
-          <p className="text-yellow-600 text-sm">
-            {formData.budget === 'less_5000' && formData.timeline === 'asap' ? (
-              "Given your budget and timeline, we recommend focusing on essential expenses first and considering shared accommodation options."
-            ) : formData.budget === 'more_20000' ? (
-              "Your budget allows for a comfortable relocation. We'll help you explore premium housing options and comprehensive support services."
-            ) : (
-              "Based on your selections, we'll create a balanced plan that aligns with your budget and timeline constraints."
-            )}
-          </p>
-        </motion.div>
-      )}
 
       {/* Validation Message */}
       {(!formData.budget || !formData.timeline) && (

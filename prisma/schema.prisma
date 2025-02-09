@@ -8,12 +8,12 @@ datasource db {
 }
 
 model Category {
-  id          String     @id @default(cuid())
-  name        String     @unique
-  slug        String     @unique
-  description String     
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   posts       Post[]
 }
 
@@ -37,28 +37,30 @@ enum ActionPlanStatus {
 }
 
 model ActionPlan {
-  id          String          @id @default(cuid())
+  id          String           @id @default(cuid())
   email       String
   status      ActionPlanStatus
   pdfUrl      String?
   data        Json
+  ip          String?
+  plans       Int              @default(0)
   error       String?
-  startedAt   DateTime       @default(now())
+  startedAt   DateTime         @default(now())
   completedAt DateTime?
-  
+
   @@index([email])
   @@index([status])
   @@map("action_plans")
 }
 
 model User {
-    id        String   @id @default(cuid())
-    email     String   @unique
-    password  String
-    name      String?
-    isAdmin   Boolean  @default(false)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  isAdmin   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@map("users")
+  @@map("users")
 }

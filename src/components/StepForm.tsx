@@ -12,7 +12,6 @@ import { FormData } from '@/lib/types';
 import { toast } from 'react-hot-toast';
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -25,7 +24,7 @@ import { Button } from './ui/button';
 interface SubmissionResponse {
   success: boolean;
   message: string;
-  estimatedTime: string;
+  pdfUrl: string;
 }
 
 const StepForm = () => {
@@ -46,7 +45,8 @@ const StepForm = () => {
     specificCity: '',
     knowledgeLevel: '',
     housingPreference: '',
-    needAssistance: ''
+    needAssistance: '',
+    countryOfOrigin: ''
   });
 
   const totalSteps = 5;
@@ -62,6 +62,12 @@ const StepForm = () => {
       setCurrentStep(currentStep - 1);
     }
   };
+
+  const getUserIp = async () => {
+    const res = await fetch('/api/getIp');
+    const data = await res.json();
+    return data.ip;
+  }
 
   const handleSubmit = async (email: string) => {
     try {
@@ -84,8 +90,10 @@ const StepForm = () => {
             specificCity: formData.specificCity,
             knowledgeLevel: formData.knowledgeLevel,
             housingPreference: formData.housingPreference,
-            needAssistance: formData.needAssistance
-          }
+            needAssistance: formData.needAssistance,
+            countryOfOrigin: formData.countryOfOrigin,
+          },
+          ipAddress: await getUserIp(),
         }),
       });
 
@@ -94,9 +102,10 @@ const StepForm = () => {
       }
 
       const result: SubmissionResponse = await response.json();
-      console.log('Form submitted successfully:', result);
-      
-      // Set the submission result and open dialog
+
+      if (result.success && result.pdfUrl) {
+        window.open(result.pdfUrl, '_blank');
+      }      
       setSubmissionResult(result);
       setIsDialogOpen(true);
       
@@ -190,19 +199,14 @@ const StepForm = () => {
       <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Success!</AlertDialogTitle>
+            <AlertDialogTitle>Alert!</AlertDialogTitle>
             <AlertDialogDescription>
               {submissionResult?.message}
-              {submissionResult?.estimatedTime && (
-                <p className="mt-2">
-                  Estimated time: {submissionResult.estimatedTime}
-                </p>
-              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <Button className='bg-blue-600 hover:bg-blue-700' onClick={handleDialogClose}>
-              Got it, thanks!
+              Close
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -46,7 +46,7 @@ ${message}
         // Send confirmation email to user
         await sendEmail({
             to: email,
-            subject: 'Thank you for contacting MetaExpat',
+            subject: '',
             text: `
 Dear ${name},
 
