@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from './ui/button';
 
-// Add this interface for the API response
 interface SubmissionResponse {
   success: boolean;
   message: string;
@@ -102,24 +101,18 @@ const StepForm = () => {
       }
 
       const result: SubmissionResponse = await response.json();
-
-      if (result.success && result.pdfUrl) {
-        // Open PDF in new tab
-        const link = document.createElement('a');
-        link.href = result.pdfUrl;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer'; // Security best practice for _blank links
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-   
       setSubmissionResult(result);
       setIsDialogOpen(true);
       
     } catch (error) {
       console.error('Error submitting form:', error);
       toast.error('Failed to submit form. Please try again.');
+    }
+  };
+
+  const handleOpenPdf = () => {
+    if (submissionResult?.pdfUrl) {
+      window.open(submissionResult.pdfUrl, '_blank');
     }
   };
 
@@ -212,8 +205,19 @@ const StepForm = () => {
               {submissionResult?.message}
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <Button className='bg-blue-600 hover:bg-blue-700' onClick={handleDialogClose}>
+          <AlertDialogFooter className="flex gap-2">
+            {submissionResult?.success && submissionResult?.pdfUrl && (
+              <Button 
+                className='bg-green-600 hover:bg-green-700'
+                onClick={handleOpenPdf}
+              >
+                Open PDF
+              </Button>
+            )}
+            <Button 
+              className='bg-blue-600 hover:bg-blue-700' 
+              onClick={handleDialogClose}
+            >
               Close
             </Button>
           </AlertDialogFooter>
