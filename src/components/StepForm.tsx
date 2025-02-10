@@ -104,8 +104,16 @@ const StepForm = () => {
       const result: SubmissionResponse = await response.json();
 
       if (result.success && result.pdfUrl) {
-        window.open(result.pdfUrl, '_blank');
-      }      
+        // Open PDF in new tab
+        const link = document.createElement('a');
+        link.href = result.pdfUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer'; // Security best practice for _blank links
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+   
       setSubmissionResult(result);
       setIsDialogOpen(true);
       
