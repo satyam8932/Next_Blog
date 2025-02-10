@@ -40,7 +40,6 @@ const WorldwideSection = () => {
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
                 >
-                    <span className="text-blue-600 text-sm font-medium uppercase">SETTLED</span>
                     <h2 className="text-4xl lg:text-5xl font-bold mt-2 mb-12">
                         Why MetaExpat is Your<br />
                         Best Choice in the UAE.

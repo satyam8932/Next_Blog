@@ -96,7 +96,7 @@ const HowItWorks = () => {
                         </div>
                         <div className="p-6">
                             <div className="flex items-center justify-between mb-8">
-                                <h4 className="text-xl font-semibold">Welcome, « Liam Nguyen</h4>
+                                <h4 className="text-xl font-semibold">Welcome, Liam Nguyen</h4>
                             </div>
                             <div className="space-y-6">
                                 <h5 className="font-medium">Upcoming Tasks</h5>

@@ -59,7 +59,7 @@ Best regards,
 The MetaExpat Team
             `,
             html: `
-                <h2>Thank you for contacting MetaExpat</h2>
+                <h2>Confirmation receipt of your message</h2>
                 <p>Dear ${name},</p>
                 <p>Thank you for contacting MetaExpat. We have received your message and will get back to you as soon as possible.</p>
                 <br>
