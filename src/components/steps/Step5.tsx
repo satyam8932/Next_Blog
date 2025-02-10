@@ -216,9 +216,9 @@ const Step5 = ({ formData, onSubmit }: Step5Props) => {
                     After submission, you'll receive:
                 </p>
                 <ul className="list-disc list-inside text-blue-600 text-sm mt-2 space-y-1">
-                    <li>A confirmation email with your summary</li>
-                    <li>A detailed action plan within 24 hours</li>
-                    <li>Contact information for your dedicated support team</li>
+                    <li>A detailed action plan after clicking Generate within 60 seconds.</li>
+                    <li>Please wait for Generation, don't hit back or you might loose your plan.</li>
+                    <li>Contact information for your dedicated support team for help.</li>
                 </ul>
             </div>
 
