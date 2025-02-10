@@ -4,6 +4,9 @@ import { markdownToPdf } from '@/lib/markdownToPdf';
 import { SYSTEM_PROMPT } from '@/lib/prompt';
 import { prisma } from '@/lib/db';
 
+export const maxDuration = 60; // 60 seconds
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
     try {
         const userData = await request.json();
@@ -11,11 +14,13 @@ export async function POST(request: NextRequest) {
         // Check if IP has reached limit
         const existingPlans = await prisma.actionPlan.count({
             where: {
-                ip: userData.ip,
-                email: userData.email,
-                status: 'COMPLETED'
+                status: 'COMPLETED',
+                OR: [
+                    { ip: userData.ipAddress },
+                    { email: userData.email }
+                ]
             }
-        });
+        });        
 
         if (existingPlans >= 2) {
             return NextResponse.json({
@@ -30,7 +35,7 @@ export async function POST(request: NextRequest) {
                 email: userData.email,
                 status: 'PROCESSING',
                 data: userData.data,
-                ip: userData.ip,
+                ip: userData.ipAddress,
             }
         });
 
