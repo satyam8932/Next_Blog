@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState, useRef } from "react";
-import { parseCookies, setCookie } from "nookies";
+import { parseCookies, setCookie, destroyCookie } from "nookies";
 
 const COOKIE_NAME = "googtrans";
 
@@ -71,10 +71,42 @@ const LanguageSwitcher = () => {
   }, []);
 
   const switchLanguage = (lang: string) => {
-    setCookie(null, COOKIE_NAME, "/auto/" + lang);
+    // Remove existing cookies first
+    destroyCookie(null, COOKIE_NAME, { path: '/' });
+    destroyCookie(null, COOKIE_NAME, { path: '/', domain: window.location.hostname });
+    destroyCookie(null, COOKIE_NAME, { path: '/', domain: `.${window.location.hostname}` });
+
+    if (lang !== 'en') {
+      // Set new cookie only if not English
+      setCookie(null, COOKIE_NAME, `/auto/${lang}`, {
+        path: '/',
+        sameSite: 'lax'
+      });
+    }
+
+    // Update Google Translate widget
+    const googleFrame = document.querySelector('.goog-te-menu-frame') as HTMLIFrameElement;
+    if (googleFrame) {
+      const googleDoc = googleFrame.contentWindow?.document;
+      if (googleDoc) {
+        const items = googleDoc.querySelectorAll('.goog-te-menu2-item');
+        items.forEach((item: Element) => {
+          if (item.textContent?.includes(languageConfig.languages.find((l: LanguageDescriptor) => l.name === lang)?.title)) {
+            (item as HTMLElement).click();
+          }
+        });
+      }
+    }
+
     setCurrentLanguage(lang);
     setIsOpen(false);
-    window.location.reload();
+
+    // Reload only if switching from a non-English language
+    if (currentLanguage !== 'en' || lang !== 'en') {
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
+    }
   };
 
   if (!currentLanguage || !languageConfig) {
