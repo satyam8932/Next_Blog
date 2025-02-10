@@ -23,6 +23,7 @@ export default function RootLayout({
         className={`antialiased`}
       >
         <Providers>{children}</Providers>
+        <Analytics />
         <div id="google_translate_element" className="hidden" />
         <Script
           src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
