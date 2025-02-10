@@ -44,20 +44,22 @@ const Step3 = ({ formData, setFormData }: Step3Props) => {
       if (!showOtherLanguage) {
         setFormData({
           ...formData,
-          languages: [...formData.languages, language]
+          languages: language
         });
       } else {
         setFormData({
           ...formData,
-          languages: formData.languages.filter(l => l !== 'Other'),
+          languages: '',
           otherLanguage: ''
         });
       }
     } else {
-      const updatedLanguages = formData.languages.includes(language)
-        ? formData.languages.filter(l => l !== language)
-        : [...formData.languages, language];
-      setFormData({ ...formData, languages: updatedLanguages });
+      setFormData({
+        ...formData,
+        languages: language,
+        otherLanguage: ''
+      });
+      setShowOtherLanguage(false);
     }
   };
 
@@ -78,9 +80,9 @@ const Step3 = ({ formData, setFormData }: Step3Props) => {
       {/* Language Preferences */}
       <div className="space-y-4">
         <label className="block text-lg font-medium text-gray-700">
-          In which languages would you like to handle administrative procedures?
+          In which language would you like your action plan?
           <span className="block text-sm text-gray-500 font-normal mt-1">
-            Select all that apply
+            Select a language
           </span>
         </label>
 
@@ -89,24 +91,22 @@ const Step3 = ({ formData, setFormData }: Step3Props) => {
             <div
               key={language}
               className={`
-                relative rounded-lg border-2 p-4 cursor-pointer transition-all duration-200
-                ${formData.languages.includes(language) 
-                  ? 'border-blue-500 bg-blue-50' 
+          relative rounded-lg border-2 p-4 cursor-pointer transition-all duration-200
+          ${formData.languages === language
+                  ? 'border-blue-500 bg-blue-50'
                   : 'border-gray-200 hover:border-blue-200'}
-              `}
+        `}
               onClick={() => handleLanguageChange(language)}
             >
               <div className="flex items-center space-x-3">
                 <div className={`
-                  w-5 h-5 rounded border-2 flex items-center justify-center
-                  ${formData.languages.includes(language) 
-                    ? 'border-blue-500 bg-blue-500' 
+            w-5 h-5 rounded-full border-2 flex items-center justify-center
+            ${formData.languages === language
+                    ? 'border-blue-500 bg-blue-500'
                     : 'border-gray-300'}
-                `}>
-                  {formData.languages.includes(language) && (
-                    <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
+          `}>
+                  {formData.languages === language && (
+                    <div className="w-2 h-2 bg-white rounded-full" />
                   )}
                 </div>
                 <span className="text-gray-700">{language}</span>
@@ -146,8 +146,8 @@ const Step3 = ({ formData, setFormData }: Step3Props) => {
           <div
             className={`
               relative rounded-lg border-2 p-4 cursor-pointer transition-all duration-200
-              ${formData.preferredCity === 'specific' 
-                ? 'border-blue-500 bg-blue-50' 
+              ${formData.preferredCity === 'specific'
+                ? 'border-blue-500 bg-blue-50'
                 : 'border-gray-200 hover:border-blue-200'}
             `}
             onClick={() => {
@@ -158,8 +158,8 @@ const Step3 = ({ formData, setFormData }: Step3Props) => {
             <div className="flex items-center space-x-3">
               <div className={`
                 w-5 h-5 rounded-full border-2 flex items-center justify-center
-                ${formData.preferredCity === 'specific' 
-                  ? 'border-blue-500' 
+                ${formData.preferredCity === 'specific'
+                  ? 'border-blue-500'
                   : 'border-gray-300'}
               `}>
                 {formData.preferredCity === 'specific' && (
@@ -173,8 +173,8 @@ const Step3 = ({ formData, setFormData }: Step3Props) => {
           <div
             className={`
               relative rounded-lg border-2 p-4 cursor-pointer transition-all duration-200
-              ${formData.preferredCity === 'recommendation' 
-                ? 'border-blue-500 bg-blue-50' 
+              ${formData.preferredCity === 'recommendation'
+                ? 'border-blue-500 bg-blue-50'
                 : 'border-gray-200 hover:border-blue-200'}
             `}
             onClick={() => {
@@ -185,8 +185,8 @@ const Step3 = ({ formData, setFormData }: Step3Props) => {
             <div className="flex items-center space-x-3">
               <div className={`
                 w-5 h-5 rounded-full border-2 flex items-center justify-center
-                ${formData.preferredCity === 'recommendation' 
-                  ? 'border-blue-500' 
+                ${formData.preferredCity === 'recommendation'
+                  ? 'border-blue-500'
                   : 'border-gray-300'}
               `}>
                 {formData.preferredCity === 'recommendation' && (
@@ -230,8 +230,8 @@ const Step3 = ({ formData, setFormData }: Step3Props) => {
               whileTap={{ scale: 0.99 }}
               className={`
                 relative rounded-xl border-2 p-6 cursor-pointer transition-all duration-200
-                ${formData.knowledgeLevel === level.value 
-                  ? 'border-blue-500 bg-blue-50' 
+                ${formData.knowledgeLevel === level.value
+                  ? 'border-blue-500 bg-blue-50'
                   : 'border-gray-200 hover:border-blue-200'}
               `}
               onClick={() => setFormData({ ...formData, knowledgeLevel: level.value })}
@@ -239,8 +239,8 @@ const Step3 = ({ formData, setFormData }: Step3Props) => {
               <div className="flex items-start space-x-3">
                 <div className={`
                   mt-1 w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center
-                  ${formData.knowledgeLevel === level.value 
-                    ? 'border-blue-500' 
+                  ${formData.knowledgeLevel === level.value
+                    ? 'border-blue-500'
                     : 'border-gray-300'}
                 `}>
                   {formData.knowledgeLevel === level.value && (
@@ -257,8 +257,7 @@ const Step3 = ({ formData, setFormData }: Step3Props) => {
         </div>
       </div>
 
-      {/* Validation Message */}
-      {(!formData.languages.length || !formData.preferredCity || !formData.knowledgeLevel) && (
+      {(!formData.languages || !formData.preferredCity || !formData.knowledgeLevel) && (
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

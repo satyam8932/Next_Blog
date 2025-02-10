@@ -13,7 +13,6 @@ import {
 } from 'chart.js';
 import { format } from 'date-fns';
 
-// Register ChartJS components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -24,7 +23,22 @@ ChartJS.register(
   Legend
 );
 
-// Types
+export interface FormData {
+  moveReason: string[];
+  otherMoveReason?: string;
+  familyStatus: string;
+  budget: string;
+  timeline: string;
+  languages: string;
+  otherLanguage?: string;
+  preferredCity: string;
+  specificCity?: string;
+  knowledgeLevel: string;
+  housingPreference: string;
+  needAssistance: string;
+  countryOfOrigin: string;
+}
+
 interface ActionPlan {
   id: string;
   email: string;
@@ -33,6 +47,7 @@ interface ActionPlan {
   error?: string;
   startedAt: string;
   completedAt?: string;
+  data?: FormData; // Add the form data field
 }
 
 interface DashboardStats {
@@ -51,6 +66,7 @@ export default function AdminDashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedPlan, setSelectedPlan] = useState<ActionPlan | null>(null);
   const itemsPerPage = 10;
 
   useEffect(() => {
@@ -68,6 +84,120 @@ export default function AdminDashboardPage() {
       setIsLoading(false);
     }
   };
+
+  const renderJsonData = (data: FormData) => {
+    return (
+      <div className="bg-gray-50 p-4 rounded-lg">
+        <div className="flex justify-between items-center mb-2">
+          <h4 className="text-sm font-medium text-gray-700">Complete Form Data</h4>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+            }}
+            className="text-sm text-blue-600 hover:text-blue-800 flex items-center space-x-1"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+              />
+            </svg>
+            <span>Copy JSON</span>
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          {/* Move Reason */}
+          <div>
+            <p className="text-sm font-medium text-gray-500">Move Reason</p>
+            <p className="text-sm text-gray-900">
+              {data.moveReason.join(', ')}
+              {data.otherMoveReason && ` (Other: ${data.otherMoveReason})`}
+            </p>
+          </div>
+
+          {/* Family Status */}
+          <div>
+            <p className="text-sm font-medium text-gray-500">Family Status</p>
+            <p className="text-sm text-gray-900">{data.familyStatus}</p>
+          </div>
+
+          {/* Budget */}
+          <div>
+            <p className="text-sm font-medium text-gray-500">Budget</p>
+            <p className="text-sm text-gray-900">{data.budget}</p>
+          </div>
+
+          {/* Timeline */}
+          <div>
+            <p className="text-sm font-medium text-gray-500">Timeline</p>
+            <p className="text-sm text-gray-900">{data.timeline}</p>
+          </div>
+
+          {/* Language */}
+          <div>
+            <p className="text-sm font-medium text-gray-500">Language</p>
+            <p className="text-sm text-gray-900">
+              {data.languages}
+              {data.otherLanguage && ` (${data.otherLanguage})`}
+            </p>
+          </div>
+
+          {/* City Preference */}
+          <div>
+            <p className="text-sm font-medium text-gray-500">City Preference</p>
+            <p className="text-sm text-gray-900">
+              {data.preferredCity === 'specific' ? data.specificCity : 'Needs recommendation'}
+            </p>
+          </div>
+
+          {/* Knowledge Level */}
+          <div>
+            <p className="text-sm font-medium text-gray-500">Knowledge Level</p>
+            <p className="text-sm text-gray-900">{data.knowledgeLevel}</p>
+          </div>
+
+          {/* Housing Preference */}
+          <div>
+            <p className="text-sm font-medium text-gray-500">Housing Preference</p>
+            <p className="text-sm text-gray-900">{data.housingPreference}</p>
+          </div>
+
+          {/* Need Assistance */}
+          <div>
+            <p className="text-sm font-medium text-gray-500">Need Assistance</p>
+            <p className="text-sm text-gray-900">{data.needAssistance}</p>
+          </div>
+
+          {/* Country of Origin */}
+          <div>
+            <p className="text-sm font-medium text-gray-500">Country of Origin</p>
+            <p className="text-sm text-gray-900">{data.countryOfOrigin}</p>
+          </div>
+        </div>
+
+        {/* Raw JSON Data */}
+        <div className="mt-4">
+          <p className="text-sm font-medium text-gray-500 mb-2">Raw JSON Data</p>
+          <pre className="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto">
+            <code className="text-sm">
+              {JSON.stringify(data, null, 2)}
+            </code>
+          </pre>
+        </div>
+      </div>
+    );
+  };
+
 
   if (isLoading) {
     return (
@@ -152,35 +282,47 @@ export default function AdminDashboardPage() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {stats?.recentPlans.map((plan) => (
-                <tr key={plan.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{plan.email}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                      ${plan.status === 'COMPLETED' ? 'bg-green-100 text-green-800' : 
-                        plan.status === 'FAILED' ? 'bg-red-100 text-red-800' : 
-                        'bg-blue-100 text-blue-800'}`}>
-                      {plan.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {format(new Date(plan.startedAt), 'MMM d, yyyy HH:mm')}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {plan.completedAt ? format(new Date(plan.completedAt), 'MMM d, yyyy HH:mm') : '-'}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {plan.pdfUrl && (
-                      <a
-                        href={plan.pdfUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-900"
-                      >
-                        View PDF
-                      </a>
-                    )}
-                  </td>
-                </tr>
+                <React.Fragment key={plan.id}>
+                  <tr
+                    className="cursor-pointer hover:bg-gray-50"
+                    onClick={() => setSelectedPlan(selectedPlan?.id === plan.id ? null : plan)}
+                  >
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{plan.email}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                        ${plan.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                          plan.status === 'FAILED' ? 'bg-red-100 text-red-800' :
+                            'bg-blue-100 text-blue-800'}`}>
+                        {plan.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {format(new Date(plan.startedAt), 'MMM d, yyyy HH:mm')}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {plan.completedAt ? format(new Date(plan.completedAt), 'MMM d, yyyy HH:mm') : '-'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {plan.pdfUrl && (
+                        <a
+                          href={plan.pdfUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-900"
+                        >
+                          View PDF
+                        </a>
+                      )}
+                    </td>
+                  </tr>
+                  {selectedPlan?.id === plan.id && plan.data && (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-4">
+                        {renderJsonData(plan.data)}
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
               ))}
             </tbody>
           </table>

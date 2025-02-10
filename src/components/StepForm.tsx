@@ -38,7 +38,7 @@ const StepForm = () => {
     familyStatus: '',
     budget: '',
     timeline: '',
-    languages: [],
+    languages: '',
     otherLanguage: '',
     preferredCity: '',
     specificCity: '',

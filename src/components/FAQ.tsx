@@ -33,7 +33,7 @@ const faqs: FAQItem[] = [
     },
     {
         question: "Is the action plan available in multiple languages?",
-        answer: "Yes! You can choose to receive your action plan in French, English, or Arabic."
+        answer: "Yes! You can choose to receive your action plan in the language of your choice."
     }
 ];
 

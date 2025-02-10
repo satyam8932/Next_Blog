@@ -33,7 +33,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row justify-between pt-8 border-t border-gray-800 text-gray-400 text-sm space-y-4 md:space-y-0">
           <p>© {year} MetaExpat. All Rights Reserved.</p>
           <div className="space-x-4">
-            <a href="/policy" className="hover:text-white">Privacy policy</a>
+            <a href="/privacy-policy" className="hover:text-white">Privacy policy</a>
             <a href="/terms" className="hover:text-white">Terms and conditions</a>
           </div>
         </div>

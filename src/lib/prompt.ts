@@ -62,7 +62,7 @@ The input data provided will include the following keys:
   familyStatus: string;
   budget: string;
   timeline: string;
-  languages: string[];
+  languages: string;
   otherLanguage?: string;
   preferredCity: string;
   specificCity?: string;
@@ -71,8 +71,11 @@ The input data provided will include the following keys:
   needAssistance: string;
 }
 
-Using this data, craft a customized action plan that covers every critical step from document preparation to settling in the UAE. Ensure that every section, task, tip, and resource is tailored to the user's information.
-
+Using this data, craft a customized action plan that covers every critical step from document preparation to settling in the UAE. 
+Ensure that every section, task, tip, and resource is tailored to the user's information.
+You have to generate the action plan in the language stated in the input data structure.
+For example: languages: "Russian" then you have to generate action plan in Russian, if languages: "Other", otherLanguage: "Italian" then you have to generate in Italian.
+Make sure the links should have to work with different languages you generate content.
 Below is an example of an action plan for your reference:
 
 **Step-by-Step Action Plan for Your Expatriation to the UAE**

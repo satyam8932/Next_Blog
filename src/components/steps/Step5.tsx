@@ -111,7 +111,7 @@ const Step5 = ({ formData, onSubmit }: Step5Props) => {
                         Preferences
                     </h3>
                     <div className="space-y-2 text-sm">
-                        <p><span className="font-medium text-gray-700">Languages:</span> <span className="text-gray-600">{formData.languages.join(', ')}</span></p>
+                        <p><span className="font-medium text-gray-700">Languages:</span> <span className="text-gray-600">{formData.languages}</span></p>
                         {formData.otherLanguage && (
                             <p><span className="font-medium text-gray-700">Other Language:</span> <span className="text-gray-600">{formData.otherLanguage}</span></p>
                         )}

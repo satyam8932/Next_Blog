@@ -43,7 +43,7 @@ export interface FormData {
   familyStatus: string;
   budget: string;
   timeline: string;
-  languages: string[];
+  languages: string;
   otherLanguage?: string;
   preferredCity: string;
   specificCity?: string;
