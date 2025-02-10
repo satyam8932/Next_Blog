@@ -16,6 +16,22 @@ declare global {
       languages: LanguageDescriptor[];
       defaultLanguage: string;
     };
+    google: {
+      translate: {
+        TranslateElement: {
+          new (options: {
+            pageLanguage: string;
+            includedLanguages: string;
+            layout?: any;
+            autoDisplay?: boolean;
+          }, element: string): void;
+          InlineLayout: {
+            SIMPLE: string;
+          };
+        };
+      };
+    };
+    googleTranslateElementInit: () => void;
   }
 }
 
@@ -26,7 +42,6 @@ const LanguageSwitcher = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Initialize language config
     window.__GOOGLE_TRANSLATION_CONFIG__ = {
       languages: [
         { title: "English", name: "en", flag: "🇬🇧" },
@@ -59,7 +74,6 @@ const LanguageSwitcher = () => {
       setLanguageConfig(window.__GOOGLE_TRANSLATION_CONFIG__);
     }
 
-    // Close dropdown when clicking outside
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
@@ -70,43 +84,85 @@ const LanguageSwitcher = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const switchLanguage = (lang: string) => {
-    // Remove existing cookies first
-    destroyCookie(null, COOKIE_NAME, { path: '/' });
-    destroyCookie(null, COOKIE_NAME, { path: '/', domain: window.location.hostname });
-    destroyCookie(null, COOKIE_NAME, { path: '/', domain: `.${window.location.hostname}` });
+  const clearTranslationCookies = () => {
+    // Clear cookies from all possible domains and paths
+    const domains = [
+      window.location.hostname,
+      `.${window.location.hostname}`,
+      window.location.hostname.split('.').slice(1).join('.'),
+      `.${window.location.hostname.split('.').slice(1).join('.')}`,
+    ];
 
+    const paths = ['/', '/path1', '/path2']; // Add your site's main paths
+
+    domains.forEach(domain => {
+      paths.forEach(path => {
+        destroyCookie(null, COOKIE_NAME, { path, domain });
+        destroyCookie(null, 'googtrans', { path, domain });
+        destroyCookie(null, 'GOOGTRANS', { path, domain });
+      });
+    });
+
+    // Also try to remove cookies using vanilla JavaScript
+    document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname};`;
+    document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${window.location.hostname};`;
+  };
+
+  const switchLanguage = (lang: string) => {
+    // First, clear all translation cookies
+    clearTranslationCookies();
+
+    // If switching to non-English
     if (lang !== 'en') {
-      // Set new cookie only if not English
       setCookie(null, COOKIE_NAME, `/auto/${lang}`, {
         path: '/',
+        domain: window.location.hostname,
         sameSite: 'lax'
       });
     }
 
-    // Update Google Translate widget
-    const googleFrame = document.querySelector('.goog-te-menu-frame') as HTMLIFrameElement;
-    if (googleFrame) {
-      const googleDoc = googleFrame.contentWindow?.document;
-      if (googleDoc) {
-        const items = googleDoc.querySelectorAll('.goog-te-menu2-item');
-        items.forEach((item: Element) => {
-          if (item.textContent?.includes(languageConfig.languages.find((l: LanguageDescriptor) => l.name === lang)?.title)) {
-            (item as HTMLElement).click();
+    // Update the Google Translate widget
+    const updateGoogleTranslate = () => {
+      if (window.google?.translate?.TranslateElement) {
+        // If switching to English, restore original
+        if (lang === 'en') {
+          const googleTeCombo = document.querySelector('.goog-te-combo') as HTMLSelectElement;
+          if (googleTeCombo) {
+            googleTeCombo.value = 'en';
+            googleTeCombo.dispatchEvent(new Event('change'));
           }
-        });
+          // Try to restore original content
+          const restore = document.querySelector('#\\:1\\.restore') as HTMLElement;
+          if (restore) {
+            restore.click();
+          }
+        } else {
+          // For other languages, use Google's translation
+          const googleTeCombo = document.querySelector('.goog-te-combo') as HTMLSelectElement;
+          if (googleTeCombo) {
+            googleTeCombo.value = lang;
+            googleTeCombo.dispatchEvent(new Event('change'));
+          }
+        }
       }
-    }
+    };
 
+    // Set current language and close dropdown
     setCurrentLanguage(lang);
     setIsOpen(false);
 
-    // Reload only if switching from a non-English language
-    if (currentLanguage !== 'en' || lang !== 'en') {
-      setTimeout(() => {
-        window.location.reload();
-      }, 100);
-    }
+    // Update Google Translate and reload if necessary
+    setTimeout(() => {
+      updateGoogleTranslate();
+      
+      // Only reload if actually changing languages
+      if (currentLanguage !== lang) {
+        setTimeout(() => {
+          window.location.reload();
+        }, 100);
+      }
+    }, 0);
   };
 
   if (!currentLanguage || !languageConfig) {
