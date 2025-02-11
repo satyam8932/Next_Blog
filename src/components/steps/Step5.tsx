@@ -193,6 +193,22 @@ const Step5 = ({ formData, onSubmit }: Step5Props) => {
                 </div>
             </div>
 
+            {/* Terms and Conditions */}
+            <div className="mt-8">
+                <label className="flex items-center space-x-3 cursor-pointer">
+                    <input
+                        type="checkbox"
+                        checked={termsAccepted}
+                        onChange={(e) => setTermsAccepted(e.target.checked)}
+                        className="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                    />
+                    <span className="text-gray-700">
+                        I confirm that all provided information is accurate and I agree to the{' '}
+                        <a href="/terms" className="text-blue-600 hover:underline">Terms and Conditions</a>
+                    </span>
+                </label>
+            </div>
+
             {/* Next Steps Information */}
             <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
                 <h3 className="text-blue-800 font-medium mb-2">What happens next?</h3>
@@ -210,8 +226,16 @@ const Step5 = ({ formData, onSubmit }: Step5Props) => {
             <div className="flex justify-center mt-8">
                 <button
                     onClick={handleSubmit}
-                    disabled={isSubmitting}
-                    className={`px-8 py-3 rounded-lg text-white font-medium bg-blue-600 hover:bg-blue-700 transition-colors duration-200 flex items-center space-x-2`}>
+                    disabled={!termsAccepted || isSubmitting}
+                    className={`
+                        px-8 py-3 rounded-lg text-white font-medium
+                        ${termsAccepted
+                            ? 'bg-blue-600 hover:bg-blue-700'
+                            : 'bg-gray-400 cursor-not-allowed'}
+                        transition-colors duration-200
+                        flex items-center space-x-2
+                    `}
+                >
                     {isSubmitting ? (
                         <>
                             <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
